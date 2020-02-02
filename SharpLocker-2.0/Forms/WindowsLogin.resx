@@ -117,8 +117,64 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="login" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\login.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        AAABAAEAICAAAAEAGACoDAAAFgAAACgAAAAgAAAAQAAAAAEAGAAAAAAAqAwAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADMmTMAvvcAvvcAvvcAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAvvcAvvcAvvcAvvcAvvcAvvcA
+        vvcAvvcAvvcAvvcAvvcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        vvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcAAAAAAAAAAAAA
+        AAAAAAAAAAAAAADqrgDqrgDqrgDqrgDqrgDqrgAAAAAAAAAAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcA
+        vvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvfqrgDqrgDqrgDqrgDqrgDqrgDqrgDqrgDqrgDqrgDqrgDq
+        rgDqrgAAAAAAAAAAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcA
+        vvfqrgDqrgDqrgDqrgDqrgDqrgDqrgDqrgDqrgDqrgDqrgDqrgDqrgAAAAAAAAAAvvcAvvcAvvcAvvcA
+        vvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvfqrgDqrgDqrgDqrgDqrgDqrgDqrgDq
+        rgDqrgDqrgDqrgDqrgDqrgAAAAAAAAAAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcA
+        vvcAvvcAvvcAvvcAvvfqrgDqrgDqrgDqrgDqrgDqrgDqrgDqrgDqrgDqrgDqrgDqrgDqrgAAAAAAAAAA
+        vvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvfqrgDqrgDqrgDq
+        rgDqrgDqrgDqrgDqrgDqrgDqrgDqrgDqrgDqrgAAAAAAAAAAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcA
+        vvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvfqrgDqrgDqrgDqrgDqrgDqrgDqrgDqrgDqrgDqrgDqrgDq
+        rgDqrgAAAAAAAAAAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcA
+        vvfqrgDqrgDqrgDqrgDqrgDqrgDqrgDqrgDqrgDqrgDqrgDqrgDqrgAAAAAAAAAAvvcAvvcAvvcAvvcA
+        vvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvfqrgDqrgDqrgDqrgDqrgDqrgDqrgDq
+        rgDqrgDqrgDqrgDqrgDqrgAAAAAAAAAAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcA
+        vvcAvvcAvvcAvvcAvvfqrgDqrgDqrgDqrgDqrgDqrgDqrgDqrgDqrgDqrgDqrgDqrgDqrgAAAAAAAAAA
+        vvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvfqrgDqrgDqrgDq
+        rgDqrgDqrgDqrgDqrgDqrgDqrgDqrgDqrgDqrgAAAAAAAAAAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcA
+        vvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvfqrgDqrgDqrgDqrgDqrgDqrgDqrgDqrgDqrgDqrgDqrgDq
+        rgDqrgAAAAAAAAAAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcAvvcA
+        vvcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAArZPArZPArZPArZPArZPArZPArZPArZPArZPArZPArZPArZPArZPAAAAAAAAAA
+        vYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwrZPArZPArZPAr
+        ZPArZPArZPArZPArZPArZPArZPArZPArZPArZPAAAAAAAAAAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwA
+        vYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwrZPArZPArZPArZPArZPArZPArZPArZPArZPArZPArZPAr
+        ZPArZPAAAAAAAAAAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwA
+        vYwrZPArZPArZPArZPArZPArZPArZPArZPArZPArZPArZPArZPArZPAAAAAAAAAAvYwAvYwAvYwAvYwA
+        vYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwrZPArZPArZPArZPArZPArZPArZPAr
+        ZPArZPArZPArZPArZPArZPAAAAAAAAAAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwA
+        vYwAvYwAvYwAvYwAvYwrZPArZPArZPArZPArZPArZPArZPArZPArZPArZPArZPArZPArZPAAAAAAAAAA
+        vYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwrZPArZPArZPAr
+        ZPArZPArZPArZPArZPArZPArZPArZPArZPArZPAAAAAAAAAAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwA
+        vYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwrZPArZPArZPArZPArZPArZPArZPArZPArZPArZPArZPAr
+        ZPArZPAAAAAAAAAAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwA
+        vYwrZPArZPArZPArZPArZPArZPArZPArZPArZPArZPArZPArZPArZPAAAAAAAAAAvYwAvYwAvYwAvYwA
+        vYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwrZPArZPArZPArZPArZPArZPArZPAr
+        ZPArZPArZPArZPArZPArZPAAAAAAAAAAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwA
+        vYwAvYwAvYwAvYwAvYwrZPArZPArZPArZPArZPArZPArZPArZPArZPArZPArZPArZPArZPAAAAAAAAAA
+        vYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAArZPArZPArZPArZPArZPArZPAAAAAAAAAAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwA
+        vYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwA
+        vYwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAvYwAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAvYwAvYwAvYwAvYz////w///4AP/+AAD+BgAAAAYAAAAGAAAABgAAAAYAAAAGAAAABgAAAAYAAAAG
+        AAAABgAAAAYAAAAGAAD//////////wAGAAAABgAAAAYAAAAGAAAABgAAAAYAAAAGAAAABgAAAAYAAAAG
+        AAAABgAA/gYAAP/+AAD///gA////8A==
+</value>
   </data>
 </root>
