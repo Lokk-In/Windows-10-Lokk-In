@@ -29,24 +29,13 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WindowsLogin));
-            this.UserIconPictureBox = new System.Windows.Forms.PictureBox();
             this.UserNameLabel = new System.Windows.Forms.Label();
             this.CapsLockLabel = new System.Windows.Forms.Label();
             this.PasswordTextBox = new System.Windows.Forms.TextBox();
             this.LoginButton = new System.Windows.Forms.Button();
+            this.UserIconPictureBox = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.UserIconPictureBox)).BeginInit();
             this.SuspendLayout();
-            // 
-            // UserIconPictureBox
-            // 
-            this.UserIconPictureBox.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.UserIconPictureBox.BackColor = System.Drawing.Color.Transparent;
-            this.UserIconPictureBox.Location = new System.Drawing.Point(300, 52);
-            this.UserIconPictureBox.Name = "UserIconPictureBox";
-            this.UserIconPictureBox.Size = new System.Drawing.Size(199, 199);
-            this.UserIconPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.UserIconPictureBox.TabIndex = 0;
-            this.UserIconPictureBox.TabStop = false;
             // 
             // UserNameLabel
             // 
@@ -110,6 +99,17 @@
             this.LoginButton.UseVisualStyleBackColor = false;
             this.LoginButton.Click += new System.EventHandler(this.LoginButton_Click);
             this.LoginButton.KeyDown += new System.Windows.Forms.KeyEventHandler(this.PasswordTextBox_KeyDown);
+            // 
+            // UserIconPictureBox
+            // 
+            this.UserIconPictureBox.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.UserIconPictureBox.BackColor = System.Drawing.Color.Transparent;
+            this.UserIconPictureBox.Location = new System.Drawing.Point(300, 52);
+            this.UserIconPictureBox.Name = "UserIconPictureBox";
+            this.UserIconPictureBox.Size = new System.Drawing.Size(199, 199);
+            this.UserIconPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.UserIconPictureBox.TabIndex = 0;
+            this.UserIconPictureBox.TabStop = false;
             // 
             // WindowsLogin
             // 

