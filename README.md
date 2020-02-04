@@ -22,6 +22,7 @@ For behaving like the real deal, SharpLocker 2.0 implements (and is limited to) 
 - Swallow often used key combinations to close or change the current window
 - Disabling the windows menu
 - Looks somewhat like the regular Windows 10 Login
+- Blurs the lock screen background with an implementation of Gaussian Blur
 
 ### Extensible
 
@@ -57,7 +58,7 @@ The `Now` function gets called when the login button is pressed or the login is 
 
 ### Create A .dll-File That Implements The IDoBadStuff Interface
 
-Modifying existing code bases can be tedious. So if you're too ~~pretentious~~ to edit the poor, little `Now` function, just create your own `.dll`-file that implements the `IDoBadStuff` interface (which is available in the `ocker_2._0.Interfaces` namespace).
+Modifying existing code bases can be tedious. So if you're too ~~pretentious~~lazy to edit the poor, little `Now` function, just create your own `.dll`-file that implements the `IDoBadStuff` interface (which is available in the `SharpLocker_2._0.Interfaces` namespace).
 
 "Why would I ever do that?", you may ask yourself.
 
@@ -72,7 +73,7 @@ This implementation has two big **+** *(pros)* and one big **-** *(cons)*.
  
 - You'll have two files to distribute instead of just one, the executable **as well** as the `.dll` file
 
-~~The Ugly~~
+#### ~~The Ugly~~
 
 "Alright, how does it work?"
 
