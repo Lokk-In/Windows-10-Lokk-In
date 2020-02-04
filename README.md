@@ -1,8 +1,11 @@
+
 # SharpLocker-2.0
 [SharpLocker](https://github.com/Pickfordmatt/SharpLocker) but betterer!
 
 ## What's this?
 This incredibly well written program fakes a Windows 10 log-in screen to trick people with sub-average computer knowledge into ~~stealing~~typing out their password. Also, for reasons unbeknownst to mankind, this was written with windows forms.
+
+![Screenshot](https://github.com/NoctusRex/SharpLocker-2.0/blob/master/Documentation/SharpLockerScreenshot.png?raw=true)
 
 ## Features
 
