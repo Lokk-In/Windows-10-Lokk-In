@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading.Tasks;
 
+/// <summary>
+/// Taken from https://github.com/mdymel/superfastblur
+/// </summary>
 namespace SharpLocker_2._0.Classes
 {
     public class GaussianBlur

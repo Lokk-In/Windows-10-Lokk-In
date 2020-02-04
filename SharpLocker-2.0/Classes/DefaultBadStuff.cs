@@ -4,7 +4,7 @@
     {
         public void Now(string password, string username, string domainName)
         {
-            
+            // Do your malicious (or non malicious) activity here
         }
     }
 }

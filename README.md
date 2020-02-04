@@ -5,7 +5,7 @@
 ## What's this?
 This incredibly well written program fakes a Windows 10 log-in screen to trick people with sub-average computer knowledge into ~~stealing~~typing out their password. Also, for reasons unbeknownst to mankind, this was written with windows forms.
 
-![Screenshot](https://github.com/NoctusRex/SharpLocker-2.0/blob/master/Documentation/SharpLockerScreenshot.png?raw=true)
+![Screenshot](https://raw.githubusercontent.com/NoctusRex/SharpLocker-2.0/master/Documentation/SharpLocker.png)
 
 ## Features
 

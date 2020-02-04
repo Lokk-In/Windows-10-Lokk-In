@@ -7,6 +7,10 @@ using System.Threading.Tasks;
 
 namespace SharpLocker_2._0.Classes
 {
+    /// <summary>
+    /// This class is responsible for intercepting certain key combinations
+    /// like Alt + Tab or Ctrl + Esc
+    /// </summary>
     public static class KeyPressHandler
     {
         private delegate int LowLevelKeyboardProcDelegate(int nCode, int wParam, ref KBDLLHOOKSTRUCT lParam);
@@ -43,9 +47,17 @@ namespace SharpLocker_2._0.Classes
             int dwExtraInfo;
         }
 
+        /// <summary>
+        /// Triggers when a key has been pressed.
+        /// If any of the key combinations listed below are pressed, they will be ignored
+        /// </summary>
+        /// <param name="nCode"></param>
+        /// <param name="wParam"></param>
+        /// <param name="lParam"></param>
+        /// <returns></returns>
         private static int LowLevelKeyboardProc(int nCode, int wParam, ref KBDLLHOOKSTRUCT lParam)
         {
-            bool blnEat = false;
+            bool deny = false;
             switch (wParam)
             {
                 case 256:
@@ -59,16 +71,17 @@ namespace SharpLocker_2._0.Classes
                     == 1)) || ((lParam.vkCode == 92) && (lParam.flags == 1)) || ((true) &&
                     (lParam.flags == 32)))
                     {
-                        blnEat = true;
+                        deny= true;
                     }
                     break;
             }
 
-            if (blnEat)
+            if (deny)
                 return 1;
             else return CallNextHookEx(0, nCode, wParam, ref lParam);
         }
 
+        // Disable key combinations
         public static void Disable()
         {
             intLLKey =
@@ -82,6 +95,7 @@ namespace SharpLocker_2._0.Classes
                   System.Reflection.Assembly.GetExecutingAssembly().GetModules()[0]).ToInt32(), 0);
         }
 
+        // enable key combinations
         public static void Enable()
         {
             intLLKey = UnhookWindowsHookEx(intLLKey);
