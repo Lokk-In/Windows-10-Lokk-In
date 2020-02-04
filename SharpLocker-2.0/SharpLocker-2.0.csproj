@@ -55,7 +55,6 @@
     <Compile Include="Classes\DefaultBadStuff.cs" />
     <Compile Include="Classes\GaussianBlur.cs" />
     <Compile Include="Classes\KeyPressHandler.cs" />
-    <Compile Include="Classes\TaskbarHandler.cs" />
     <Compile Include="Forms\WindowsLogin.cs">
       <SubType>Form</SubType>
     </Compile>
