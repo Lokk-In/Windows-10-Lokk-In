@@ -277,7 +277,7 @@ namespace SharpLocker_2._0
 
 
             // resize image and make it a circle
-            pb.Image = ResizeImage(img, pb.Width, pb.Height);
+             pb.Image = ResizeImage(img, pb.Width, pb.Height);
 
             GraphicsPath gp = new GraphicsPath();
             gp.AddEllipse(0, 0, pb.Width - 1, pb.Height - 1);
@@ -355,7 +355,7 @@ namespace SharpLocker_2._0
         private void InitializeOtherUsers()
         {
             AddChangeUserPanel("Other User", 0);
-            AddChangeUserPanel(UserPrincipal.Current.DisplayName, 1);
+            AddChangeUserPanel(UserNameLabel.Text, 1);
         }
 
         // create a "other user" control with given properties, then place it on screen
@@ -387,7 +387,7 @@ namespace SharpLocker_2._0
                 BackgroundImageLayout = ImageLayout.Stretch
             };
 
-            if (!(user is null) && user == UserPrincipal.Current.DisplayName) p.BackgroundImage = Properties.Resources.defaultButtonBackground;
+            if (!(user is null) && user == UserNameLabel.Text) p.BackgroundImage = Properties.Resources.defaultButtonBackground;
 
             p.MouseEnter += (s, e) =>
             {
