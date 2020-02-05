@@ -111,7 +111,7 @@ namespace SharpLocker_2._0
                 tb.UseSystemPasswordChar = true;
                 tb.Font = new Font("Microsoft Sans Serif", 23.25f);
                 tb.Text = tb.Text.Substring(tb.Text.Length - 1);
-                tb.ForeColor = SystemColors.WindowFrame;
+                tb.ForeColor = Color.Black;
                 tb.Select(1, 0);
             }
         }
@@ -351,7 +351,7 @@ namespace SharpLocker_2._0
                 PasswordTextBox.Height + offset));
         }
 
-        // Load all local users on targets pc and display them in the lower left corner
+        // add other users buttons and display them in the lower left corner
         private void InitializeOtherUsers()
         {
             AddChangeUserPanel("Other User", 0);
