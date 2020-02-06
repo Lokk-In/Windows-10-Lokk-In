@@ -36,7 +36,7 @@
             this.button2 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.LoginButton = new System.Windows.Forms.Button();
-            this.UserIconPictureBox = new System.Windows.Forms.PictureBox();
+            this.UserIconPictureBox = new SharpLocker_2._0.Classes.RoundPictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.UserIconPictureBox)).BeginInit();
             this.SuspendLayout();
             // 
@@ -47,10 +47,11 @@
             this.UserNameLabel.BackColor = System.Drawing.Color.Transparent;
             this.UserNameLabel.Font = new System.Drawing.Font("Segoe UI", 33F);
             this.UserNameLabel.ForeColor = System.Drawing.Color.White;
-            this.UserNameLabel.Location = new System.Drawing.Point(195, 265);
-            this.UserNameLabel.MinimumSize = new System.Drawing.Size(403, 0);
+            this.UserNameLabel.Location = new System.Drawing.Point(260, 326);
+            this.UserNameLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.UserNameLabel.MinimumSize = new System.Drawing.Size(537, 0);
             this.UserNameLabel.Name = "UserNameLabel";
-            this.UserNameLabel.Size = new System.Drawing.Size(403, 60);
+            this.UserNameLabel.Size = new System.Drawing.Size(537, 74);
             this.UserNameLabel.TabIndex = 5;
             this.UserNameLabel.Text = "UserName";
             this.UserNameLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -62,9 +63,10 @@
             this.CapsLockLabel.BackColor = System.Drawing.Color.Transparent;
             this.CapsLockLabel.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.CapsLockLabel.ForeColor = System.Drawing.Color.White;
-            this.CapsLockLabel.Location = new System.Drawing.Point(342, 382);
+            this.CapsLockLabel.Location = new System.Drawing.Point(456, 470);
+            this.CapsLockLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.CapsLockLabel.Name = "CapsLockLabel";
-            this.CapsLockLabel.Size = new System.Drawing.Size(115, 20);
+            this.CapsLockLabel.Size = new System.Drawing.Size(148, 25);
             this.CapsLockLabel.TabIndex = 9;
             this.CapsLockLabel.Text = "Caps Lock is on";
             // 
@@ -74,11 +76,12 @@
             this.PasswordTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.PasswordTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 23.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.PasswordTextBox.ForeColor = System.Drawing.SystemColors.WindowFrame;
-            this.PasswordTextBox.Location = new System.Drawing.Point(214, 343);
-            this.PasswordTextBox.MinimumSize = new System.Drawing.Size(327, 32);
+            this.PasswordTextBox.Location = new System.Drawing.Point(285, 422);
+            this.PasswordTextBox.Margin = new System.Windows.Forms.Padding(4);
+            this.PasswordTextBox.MinimumSize = new System.Drawing.Size(436, 32);
             this.PasswordTextBox.Name = "PasswordTextBox";
             this.PasswordTextBox.ShortcutsEnabled = false;
-            this.PasswordTextBox.Size = new System.Drawing.Size(327, 36);
+            this.PasswordTextBox.Size = new System.Drawing.Size(436, 44);
             this.PasswordTextBox.TabIndex = 0;
             this.PasswordTextBox.UseSystemPasswordChar = true;
             this.PasswordTextBox.Click += new System.EventHandler(this.PasswordTextBox_Click);
@@ -96,9 +99,10 @@
             this.button3.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.button3.FlatAppearance.BorderSize = 0;
             this.button3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button3.Location = new System.Drawing.Point(632, 388);
+            this.button3.Location = new System.Drawing.Point(843, 478);
+            this.button3.Margin = new System.Windows.Forms.Padding(4);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(35, 35);
+            this.button3.Size = new System.Drawing.Size(47, 43);
             this.button3.TabIndex = 12;
             this.button3.UseVisualStyleBackColor = false;
             // 
@@ -114,9 +118,10 @@
             this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button2.Font = new System.Drawing.Font("Segoe MDL2 Assets", 23.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button2.ForeColor = System.Drawing.Color.White;
-            this.button2.Location = new System.Drawing.Point(685, 388);
+            this.button2.Location = new System.Drawing.Point(913, 478);
+            this.button2.Margin = new System.Windows.Forms.Padding(4);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(35, 35);
+            this.button2.Size = new System.Drawing.Size(47, 43);
             this.button2.TabIndex = 11;
             this.button2.UseVisualStyleBackColor = false;
             // 
@@ -130,9 +135,10 @@
             this.button1.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.button1.FlatAppearance.BorderSize = 0;
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button1.Location = new System.Drawing.Point(738, 388);
+            this.button1.Location = new System.Drawing.Point(984, 478);
+            this.button1.Margin = new System.Windows.Forms.Padding(4);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(35, 35);
+            this.button1.Size = new System.Drawing.Size(47, 43);
             this.button1.TabIndex = 10;
             this.button1.UseVisualStyleBackColor = false;
             // 
@@ -145,9 +151,10 @@
             this.LoginButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.LoginButton.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.LoginButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.LoginButton.Location = new System.Drawing.Point(542, 342);
+            this.LoginButton.Location = new System.Drawing.Point(723, 421);
+            this.LoginButton.Margin = new System.Windows.Forms.Padding(4);
             this.LoginButton.Name = "LoginButton";
-            this.LoginButton.Size = new System.Drawing.Size(38, 38);
+            this.LoginButton.Size = new System.Drawing.Size(51, 47);
             this.LoginButton.TabIndex = 1;
             this.LoginButton.UseVisualStyleBackColor = false;
             this.LoginButton.Click += new System.EventHandler(this.LoginButton_Click);
@@ -157,19 +164,21 @@
             // 
             this.UserIconPictureBox.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.UserIconPictureBox.BackColor = System.Drawing.Color.Transparent;
-            this.UserIconPictureBox.Location = new System.Drawing.Point(300, 52);
+            this.UserIconPictureBox.Location = new System.Drawing.Point(400, 64);
+            this.UserIconPictureBox.Margin = new System.Windows.Forms.Padding(4);
             this.UserIconPictureBox.Name = "UserIconPictureBox";
-            this.UserIconPictureBox.Size = new System.Drawing.Size(199, 199);
+            this.UserIconPictureBox.Size = new System.Drawing.Size(265, 245);
             this.UserIconPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.UserIconPictureBox.TabIndex = 0;
+            this.UserIconPictureBox.TabIndex = 13;
             this.UserIconPictureBox.TabStop = false;
             // 
             // WindowsLogin
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(1067, 554);
+            this.Controls.Add(this.UserIconPictureBox);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
@@ -177,9 +186,9 @@
             this.Controls.Add(this.PasswordTextBox);
             this.Controls.Add(this.CapsLockLabel);
             this.Controls.Add(this.UserNameLabel);
-            this.Controls.Add(this.UserIconPictureBox);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "WindowsLogin";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
@@ -198,8 +207,6 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.PictureBox UserIconPictureBox;
         private System.Windows.Forms.Label UserNameLabel;
         private System.Windows.Forms.Label CapsLockLabel;
         private System.Windows.Forms.TextBox PasswordTextBox;
@@ -207,6 +214,7 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button3;
+        private Classes.RoundPictureBox UserIconPictureBox;
     }
 }
 
