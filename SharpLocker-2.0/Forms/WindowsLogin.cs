@@ -216,13 +216,19 @@ namespace SharpLocker_2._0
                 "Microsoft\\Windows\\Themes\\TranscodedWallpaper"));
 
         // Set the users wallpaper as the form background
-        private void InitializeBackground() => BackgroundImage = GetBackgroundImage();
-
+        private void InitializeBackground()
+        {
+            BackgroundImage = GetBackgroundImage();
+        }
         // blur the users wallpaper and set it as the form background
         private void BlurBackground()
         {
             GaussianBlur blur = new GaussianBlur(GetBackgroundImage());
             BackgroundImage = blur.Process(2);
+
+            if (BackgroundImage.IsPixelBright(11, 387) || //Bottom left
+                BackgroundImage.IsPixelBright(EaseOfAccessButton.Location.X, EaseOfAccessButton.Location.Y) ||
+                BackgroundImage.IsPixelBright(UserNameLabel.Location.X, UserNameLabel.Location.Y)) BackgroundImage.AdjustBrightness(-80);
         }
 
         // Load the current users profile picture into the form
@@ -277,35 +283,10 @@ namespace SharpLocker_2._0
 
 
             // resize image and make it a circle
-            pb.Image = ResizeImage(img, pb.Width, pb.Height);
-
+            pb.Image = img.ResizeImage(pb.Width, pb.Height);
         }
 
-        // Resize any image to a certain size
-        public Bitmap ResizeImage(Image image, int width, int height)
-        {
-            var destRect = new Rectangle(0, 0, width, height);
-            var destImage = new Bitmap(width, height);
 
-            destImage.SetResolution(image.HorizontalResolution, image.VerticalResolution);
-
-            using (var graphics = Graphics.FromImage(destImage))
-            {
-                graphics.CompositingMode = CompositingMode.SourceCopy;
-                graphics.CompositingQuality = CompositingQuality.HighQuality;
-                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                graphics.SmoothingMode = SmoothingMode.HighQuality;
-                graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-
-                using (var wrapMode = new ImageAttributes())
-                {
-                    wrapMode.SetWrapMode(WrapMode.TileFlipXY);
-                    graphics.DrawImage(image, destRect, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, wrapMode);
-                }
-            }
-
-            return destImage;
-        }
 
         // on release builds, black out all non-primary screens
         private void InitializeOtherScreens()

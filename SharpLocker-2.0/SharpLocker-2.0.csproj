@@ -54,6 +54,7 @@
   <ItemGroup>
     <Compile Include="Classes\DefaultBadStuff.cs" />
     <Compile Include="Classes\GaussianBlur.cs" />
+    <Compile Include="Classes\ImageExtensions.cs" />
     <Compile Include="Classes\KeyPressHandler.cs" />
     <Compile Include="Classes\RoundPictureBox.cs">
       <SubType>Component</SubType>
