@@ -75,6 +75,13 @@ namespace SharpLocker_2._0
 
         #region "Password"
 
+        // Show password when button is pressed
+        private void ShowPasswordButton_Click(object sender, EventArgs e)
+        {
+            if (PasswordTextBox.Text != PLACEHOLDER_TEXT)
+                PasswordTextBox.UseSystemPasswordChar = !PasswordTextBox.UseSystemPasswordChar;
+        }
+
         private void PasswordTextBox_KeyDown(object sender, KeyEventArgs e)
         {
             // Show caps lock warning
@@ -110,7 +117,7 @@ namespace SharpLocker_2._0
             {
                 tb.UseSystemPasswordChar = true;
                 tb.Font = new Font("Microsoft Sans Serif", 23.25f);
-                tb.Text = tb.Text.Substring(tb.Text.Length - 1);
+                tb.Text = tb.Text.Substring(0, 1);
                 tb.ForeColor = Color.Black;
                 tb.Select(1, 0);
             }
@@ -224,7 +231,7 @@ namespace SharpLocker_2._0
         private void BlurBackground()
         {
             GaussianBlur blur = new GaussianBlur(GetBackgroundImage());
-            BackgroundImage = blur.Process(2);
+            BackgroundImage = blur.Process(10);
 
             if (BackgroundImage.IsPixelBright(11, 387) || //Bottom left
                 BackgroundImage.IsPixelBright(EaseOfAccessButton.Location.X, EaseOfAccessButton.Location.Y) ||
@@ -338,8 +345,8 @@ namespace SharpLocker_2._0
         // create a "other user" control with given properties, then place it on screen
         private void AddChangeUserPanel(string user, int panelCount)
         {
-            int panelX = 12;
-            int panelY = 388;
+            int panelX = 30;
+            int panelY = 380;
             int panelWidth = 200;
             int panelHeight = 50;
 
@@ -361,7 +368,8 @@ namespace SharpLocker_2._0
                 Size = new Size(panelWidth, panelHeight),
                 BorderStyle = BorderStyle.None,
                 BackColor = Color.Transparent,
-                BackgroundImageLayout = ImageLayout.Stretch
+                BackgroundImageLayout = ImageLayout.Stretch,
+                TabStop = false
             };
 
             if (!(user is null) && user == UserPrincipal.Current.DisplayName) p.BackgroundImage = Properties.Resources.defaultButtonBackground;
@@ -382,7 +390,8 @@ namespace SharpLocker_2._0
                 Anchor = AnchorStyles.Left | AnchorStyles.Bottom,
                 BackgroundImageLayout = ImageLayout.Stretch,
                 Size = new Size(pictureBoxWidth, pictureBoxHeight),
-                Location = new Point(pictureBoxX, pictureBoxY)
+                Location = new Point(pictureBoxX, pictureBoxY),
+                TabStop = false
             };
 
             pb.MouseEnter += (s, e) =>
@@ -405,7 +414,8 @@ namespace SharpLocker_2._0
                 Font = new Font("Segoe UI", 13),
                 ForeColor = Color.White,
                 Text = user,
-                TextAlign = ContentAlignment.MiddleLeft
+                TextAlign = ContentAlignment.MiddleLeft,
+                TabStop = false
             };
 
             b.MouseEnter += (s, e) =>
@@ -428,6 +438,7 @@ namespace SharpLocker_2._0
             p.Controls.Add(b);
             Controls.Add(p);
         }
+
     }
 
     #endregion
