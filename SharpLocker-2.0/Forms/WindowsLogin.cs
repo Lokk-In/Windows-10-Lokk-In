@@ -396,7 +396,7 @@ namespace SharpLocker_2._0
                 TabStop = false
             };
 
-            if (!(user is null) && user == UserPrincipal.Current.DisplayName) p.BackgroundImage = Properties.Resources.defaultButtonBackground;
+            if (!(user is null) && user == UserNameLabel.Text) p.BackgroundImage = Properties.Resources.defaultButtonBackground;
 
             p.MouseEnter += (s, e) =>
             {
