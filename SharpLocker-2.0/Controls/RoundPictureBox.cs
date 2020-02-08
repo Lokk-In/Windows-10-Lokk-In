@@ -3,7 +3,7 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Windows.Forms;
 
-namespace SharpLocker_2._0.Classes
+namespace SharpLocker_2._0.Controls
 {
     public class RoundPictureBox: PictureBox
     {

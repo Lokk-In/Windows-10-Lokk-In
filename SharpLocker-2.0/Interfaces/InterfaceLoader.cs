@@ -7,11 +7,11 @@ using System.Windows.Forms;
 
 namespace SharpLocker_2._0.Interfaces
 {
-    public class BadStuffLoader
+    public static class InterfaceLoader
     {
-        public IDoBadStuff Get()
+        public static T Get<T>()
         {
-            IDoBadStuff test = null;
+            T @interface = default(T);
 
             GetDlls().ForEach(d =>
             {
@@ -19,10 +19,10 @@ namespace SharpLocker_2._0.Interfaces
                 {
                     foreach (Type t in Assembly.LoadFrom(d).GetTypes())
                     {
-                        if (typeof(IDoBadStuff) == t) { continue; }
-                        if (t.GetInterface(typeof(IDoBadStuff).FullName) is null) { continue; }
+                        if (typeof(T) == t) { continue; }
+                        if (t.GetInterface(typeof(T).FullName) is null) { continue; }
 
-                        test = (IDoBadStuff)Activator.CreateInstance(t);
+                        @interface = (T)Activator.CreateInstance(t);
                     }
 
                 }
@@ -30,10 +30,10 @@ namespace SharpLocker_2._0.Interfaces
 
             });
 
-            return test;
+            return @interface;
         }
 
-        private List<string> GetDlls()
+        private static List<string> GetDlls()
         {
             return Directory.GetFiles(Application.StartupPath).Where(x => x.EndsWith(".dll")).ToList();
         }

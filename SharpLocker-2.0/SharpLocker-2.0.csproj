@@ -52,14 +52,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\Configuration.cs" />
     <Compile Include="Classes\DefaultBadStuff.cs" />
     <Compile Include="Classes\GaussianBlur.cs" />
     <Compile Include="Classes\ImageExtensions.cs" />
     <Compile Include="Classes\KeyPressHandler.cs" />
-    <Compile Include="Classes\NoBaloonTipTextbox.cs">
+    <Compile Include="Controls\NoBaloonTipTextbox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Classes\RoundPictureBox.cs">
+    <Compile Include="Controls\RoundPictureBox.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Forms\WindowsLogin.cs">
@@ -68,8 +69,9 @@
     <Compile Include="Forms\WindowsLogin.Designer.cs">
       <DependentUpon>WindowsLogin.cs</DependentUpon>
     </Compile>
-    <Compile Include="Interfaces\BadStuffLoader.cs" />
+    <Compile Include="Interfaces\InterfaceLoader.cs" />
     <Compile Include="Interfaces\IDoBadStuff.cs" />
+    <Compile Include="Interfaces\ISetup.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Forms\WindowsLogin.resx">

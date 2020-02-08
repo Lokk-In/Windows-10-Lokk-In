@@ -36,8 +36,8 @@
             this.PowerButton = new System.Windows.Forms.Button();
             this.LoginButton = new System.Windows.Forms.Button();
             this.ShowPasswordButton = new System.Windows.Forms.Button();
-            this.PasswordTextBox = new SharpLocker_2._0.Classes.NoBaloonTipTextbox();
-            this.UserIconPictureBox = new SharpLocker_2._0.Classes.RoundPictureBox();
+            this.PasswordTextBox = new SharpLocker_2._0.Controls.NoBaloonTipTextbox();
+            this.UserIconPictureBox = new SharpLocker_2._0.Controls.RoundPictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.UserIconPictureBox)).BeginInit();
             this.SuspendLayout();
             // 
@@ -171,7 +171,7 @@
             this.PasswordTextBox.Name = "PasswordTextBox";
             this.PasswordTextBox.ShortcutsEnabled = false;
             this.PasswordTextBox.Size = new System.Drawing.Size(290, 36);
-            this.PasswordTextBox.TabIndex = 18;
+            this.PasswordTextBox.TabIndex = 0;
             this.PasswordTextBox.Click += new System.EventHandler(this.PasswordTextBox_Click);
             this.PasswordTextBox.TextChanged += new System.EventHandler(this.PasswordTextBox_TextChanged);
             this.PasswordTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.PasswordTextBox_KeyDown);
@@ -226,12 +226,12 @@
         private System.Windows.Forms.Label UserNameLabel;
         private System.Windows.Forms.Label CapsLockLabel;
         private System.Windows.Forms.Button LoginButton;
-        private Classes.RoundPictureBox UserIconPictureBox;
+        private Controls.RoundPictureBox UserIconPictureBox;
         private System.Windows.Forms.Button ConnectionButton;
         private System.Windows.Forms.Button EaseOfAccessButton;
         private System.Windows.Forms.Button PowerButton;
         private System.Windows.Forms.Button ShowPasswordButton;
-        private Classes.NoBaloonTipTextbox PasswordTextBox;
+        private Controls.NoBaloonTipTextbox PasswordTextBox;
     }
 }
 
