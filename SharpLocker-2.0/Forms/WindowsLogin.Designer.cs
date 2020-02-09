@@ -38,6 +38,8 @@
             this.ShowPasswordButton = new System.Windows.Forms.Button();
             this.PasswordTextBox = new SharpLocker_2._0.Controls.NoBaloonTipTextbox();
             this.UserIconPictureBox = new SharpLocker_2._0.Controls.RoundPictureBox();
+            this.WrongPasswordLabel = new System.Windows.Forms.Label();
+            this.WrongPasswordButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.UserIconPictureBox)).BeginInit();
             this.SuspendLayout();
             // 
@@ -187,6 +189,39 @@
             this.UserIconPictureBox.TabIndex = 13;
             this.UserIconPictureBox.TabStop = false;
             // 
+            // WrongPasswordLabel
+            // 
+            this.WrongPasswordLabel.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.WrongPasswordLabel.AutoSize = true;
+            this.WrongPasswordLabel.BackColor = System.Drawing.Color.Transparent;
+            this.WrongPasswordLabel.Font = new System.Drawing.Font("Segoe UI Semibold", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.WrongPasswordLabel.ForeColor = System.Drawing.Color.White;
+            this.WrongPasswordLabel.Location = new System.Drawing.Point(-61, 337);
+            this.WrongPasswordLabel.Name = "WrongPasswordLabel";
+            this.WrongPasswordLabel.Size = new System.Drawing.Size(962, 40);
+            this.WrongPasswordLabel.TabIndex = 18;
+            this.WrongPasswordLabel.Text = resources.GetString("WrongPasswordLabel.Text");
+            // 
+            // WrongPasswordButton
+            // 
+            this.WrongPasswordButton.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.WrongPasswordButton.AutoSize = true;
+            this.WrongPasswordButton.BackColor = System.Drawing.Color.Transparent;
+            this.WrongPasswordButton.BackgroundImage = global::SharpLocker_2._0.Properties.Resources.defaultButtonBackground;
+            this.WrongPasswordButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.WrongPasswordButton.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.WrongPasswordButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.WrongPasswordButton.Font = new System.Drawing.Font("Segoe UI Semibold", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.WrongPasswordButton.ForeColor = System.Drawing.Color.White;
+            this.WrongPasswordButton.Location = new System.Drawing.Point(347, 385);
+            this.WrongPasswordButton.Name = "WrongPasswordButton";
+            this.WrongPasswordButton.Size = new System.Drawing.Size(110, 32);
+            this.WrongPasswordButton.TabIndex = 19;
+            this.WrongPasswordButton.TabStop = false;
+            this.WrongPasswordButton.Text = "OK";
+            this.WrongPasswordButton.UseVisualStyleBackColor = false;
+            this.WrongPasswordButton.Click += new System.EventHandler(this.WrongPasswordButton_Click);
+            // 
             // WindowsLogin
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -194,6 +229,8 @@
             this.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.WrongPasswordButton);
+            this.Controls.Add(this.WrongPasswordLabel);
             this.Controls.Add(this.PasswordTextBox);
             this.Controls.Add(this.ShowPasswordButton);
             this.Controls.Add(this.ConnectionButton);
@@ -232,6 +269,8 @@
         private System.Windows.Forms.Button PowerButton;
         private System.Windows.Forms.Button ShowPasswordButton;
         private Controls.NoBaloonTipTextbox PasswordTextBox;
+        private System.Windows.Forms.Label WrongPasswordLabel;
+        private System.Windows.Forms.Button WrongPasswordButton;
     }
 }
 

