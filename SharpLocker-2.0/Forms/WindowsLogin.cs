@@ -106,10 +106,13 @@ namespace SharpLocker_2._0
             PasswordTextBox.Visible = !wrongPassword;
             ShowPasswordButton.Visible = !wrongPassword;
             LoginButton.Visible = !wrongPassword;
-            CapsLockLabel.Visible = !wrongPassword;
+            CapsLockLabel.Visible = !wrongPassword && IsKeyLocked(Keys.CapsLock);
 
             WrongPasswordLabel.Visible = wrongPassword;
             WrongPasswordButton.Visible = wrongPassword;
+            if (wrongPassword) WrongPasswordButton.Focus();
+
+            Refresh();
         }
 
         #region "Password"
@@ -232,6 +235,8 @@ namespace SharpLocker_2._0
             DenyClose = true;
             // display CapsLock notification if necessary
             CapsLockLabel.Visible = IsKeyLocked(Keys.CapsLock);
+
+            ChangeVisiblityOfPasswordControls(false);
 
             TopMost = !Configuration.DebugMode;
         }
@@ -387,7 +392,9 @@ namespace SharpLocker_2._0
         // draw a white border around the password text box
         private void WindowsLogin_Paint(object sender, PaintEventArgs e)
         {
-            int offset = 1; //TODO: hide borders
+            if (!PasswordTextBox.Visible) return;
+           
+            int offset = 1;
             e.Graphics.DrawRectangle(new Pen(LoginButton.FlatAppearance.BorderColor), new Rectangle(
                 PasswordTextBox.Location.X - offset,
                 PasswordTextBox.Location.Y - offset,

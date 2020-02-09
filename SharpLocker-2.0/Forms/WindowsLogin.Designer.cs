@@ -36,10 +36,10 @@
             this.PowerButton = new System.Windows.Forms.Button();
             this.LoginButton = new System.Windows.Forms.Button();
             this.ShowPasswordButton = new System.Windows.Forms.Button();
-            this.PasswordTextBox = new SharpLocker_2._0.Controls.NoBaloonTipTextbox();
-            this.UserIconPictureBox = new SharpLocker_2._0.Controls.RoundPictureBox();
             this.WrongPasswordLabel = new System.Windows.Forms.Label();
             this.WrongPasswordButton = new System.Windows.Forms.Button();
+            this.PasswordTextBox = new SharpLocker_2._0.Controls.NoBaloonTipTextbox();
+            this.UserIconPictureBox = new SharpLocker_2._0.Controls.RoundPictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.UserIconPictureBox)).BeginInit();
             this.SuspendLayout();
             // 
@@ -163,32 +163,6 @@
             this.ShowPasswordButton.UseVisualStyleBackColor = false;
             this.ShowPasswordButton.Click += new System.EventHandler(this.ShowPasswordButton_Click);
             // 
-            // PasswordTextBox
-            // 
-            this.PasswordTextBox.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.PasswordTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.PasswordTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 23.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.PasswordTextBox.ForeColor = System.Drawing.SystemColors.WindowFrame;
-            this.PasswordTextBox.Location = new System.Drawing.Point(214, 343);
-            this.PasswordTextBox.Name = "PasswordTextBox";
-            this.PasswordTextBox.ShortcutsEnabled = false;
-            this.PasswordTextBox.Size = new System.Drawing.Size(290, 36);
-            this.PasswordTextBox.TabIndex = 0;
-            this.PasswordTextBox.Click += new System.EventHandler(this.PasswordTextBox_Click);
-            this.PasswordTextBox.TextChanged += new System.EventHandler(this.PasswordTextBox_TextChanged);
-            this.PasswordTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.PasswordTextBox_KeyDown);
-            // 
-            // UserIconPictureBox
-            // 
-            this.UserIconPictureBox.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.UserIconPictureBox.BackColor = System.Drawing.Color.Transparent;
-            this.UserIconPictureBox.Location = new System.Drawing.Point(300, 52);
-            this.UserIconPictureBox.Name = "UserIconPictureBox";
-            this.UserIconPictureBox.Size = new System.Drawing.Size(199, 199);
-            this.UserIconPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.UserIconPictureBox.TabIndex = 13;
-            this.UserIconPictureBox.TabStop = false;
-            // 
             // WrongPasswordLabel
             // 
             this.WrongPasswordLabel.Anchor = System.Windows.Forms.AnchorStyles.None;
@@ -221,6 +195,32 @@
             this.WrongPasswordButton.Text = "OK";
             this.WrongPasswordButton.UseVisualStyleBackColor = false;
             this.WrongPasswordButton.Click += new System.EventHandler(this.WrongPasswordButton_Click);
+            // 
+            // PasswordTextBox
+            // 
+            this.PasswordTextBox.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.PasswordTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.PasswordTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 23.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.PasswordTextBox.ForeColor = System.Drawing.SystemColors.WindowFrame;
+            this.PasswordTextBox.Location = new System.Drawing.Point(214, 343);
+            this.PasswordTextBox.Name = "PasswordTextBox";
+            this.PasswordTextBox.ShortcutsEnabled = false;
+            this.PasswordTextBox.Size = new System.Drawing.Size(290, 36);
+            this.PasswordTextBox.TabIndex = 0;
+            this.PasswordTextBox.Click += new System.EventHandler(this.PasswordTextBox_Click);
+            this.PasswordTextBox.TextChanged += new System.EventHandler(this.PasswordTextBox_TextChanged);
+            this.PasswordTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.PasswordTextBox_KeyDown);
+            // 
+            // UserIconPictureBox
+            // 
+            this.UserIconPictureBox.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.UserIconPictureBox.BackColor = System.Drawing.Color.Transparent;
+            this.UserIconPictureBox.Location = new System.Drawing.Point(300, 52);
+            this.UserIconPictureBox.Name = "UserIconPictureBox";
+            this.UserIconPictureBox.Size = new System.Drawing.Size(199, 199);
+            this.UserIconPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.UserIconPictureBox.TabIndex = 13;
+            this.UserIconPictureBox.TabStop = false;
             // 
             // WindowsLogin
             // 

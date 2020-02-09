@@ -112,6 +112,7 @@
     <None Include="Resources\accessibility.png" />
     <None Include="Resources\power.png" />
     <None Include="Resources\show.png" />
+    <None Include="Resources\windowsLoad.gif" />
     <Content Include="windows.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

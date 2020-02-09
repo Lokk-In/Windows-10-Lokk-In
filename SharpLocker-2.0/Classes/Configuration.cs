@@ -11,7 +11,7 @@ namespace SharpLocker_2._0.Classes
         /// <summary>
         /// Enables or disables the debug mode
         /// </summary>
-        public bool DebugMode { get; set; } = true;
+        public bool DebugMode { get; set; } = false;
 
         /// <summary>
         /// The text that is displayed as placeholder.
