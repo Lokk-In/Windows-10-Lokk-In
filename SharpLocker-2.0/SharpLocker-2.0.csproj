@@ -52,7 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\Configuration.cs" />
+    <Compile Include="Models\Configuration.cs" />
     <Compile Include="Classes\DefaultBadStuff.cs" />
     <Compile Include="Classes\GaussianBlur.cs" />
     <Compile Include="Classes\ImageExtensions.cs" />
@@ -72,6 +72,7 @@
     <Compile Include="Interfaces\InterfaceLoader.cs" />
     <Compile Include="Interfaces\IDoBadStuff.cs" />
     <Compile Include="Interfaces\ISetup.cs" />
+    <Compile Include="Models\Result.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Forms\WindowsLogin.resx">

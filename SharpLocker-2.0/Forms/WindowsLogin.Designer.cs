@@ -150,7 +150,7 @@
             this.ShowPasswordButton.BackColor = System.Drawing.SystemColors.Window;
             this.ShowPasswordButton.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("ShowPasswordButton.BackgroundImage")));
             this.ShowPasswordButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ShowPasswordButton.FlatAppearance.BorderColor = System.Drawing.Color.WhiteSmoke;
+            this.ShowPasswordButton.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.ShowPasswordButton.FlatAppearance.BorderSize = 0;
             this.ShowPasswordButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.ShowPasswordButton.ForeColor = System.Drawing.Color.Transparent;

