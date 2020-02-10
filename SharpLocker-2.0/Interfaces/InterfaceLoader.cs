@@ -7,13 +7,18 @@ using System.Windows.Forms;
 
 namespace SharpLocker_2._0.Interfaces
 {
-    public static class InterfaceLoader
+    internal static class InterfaceLoader
     {
-        public static T Get<T>()
+        public static T Get<T>(bool excludeExe = false)
         {
-            T @interface = default(T);
+            return GetAll<T>(excludeExe).FirstOrDefault();
+        }
 
-            GetDlls().ForEach(d =>
+        public static List<T> GetAll<T>(bool excludeExe = false)
+        {
+            List<T> interfaces = new List<T>();
+
+            GetDlls(excludeExe).ForEach(d =>
             {
                 try
                 {
@@ -22,7 +27,7 @@ namespace SharpLocker_2._0.Interfaces
                         if (typeof(T) == t) { continue; }
                         if (t.GetInterface(typeof(T).FullName) is null) { continue; }
 
-                        @interface = (T)Activator.CreateInstance(t);
+                        interfaces.Add((T)Activator.CreateInstance(t));
                     }
 
                 }
@@ -30,12 +35,12 @@ namespace SharpLocker_2._0.Interfaces
 
             });
 
-            return @interface;
+            return interfaces;
         }
 
-        private static List<string> GetDlls()
+        private static List<string> GetDlls(bool excludeExe = false)
         {
-            return Directory.GetFiles(Application.StartupPath).Where(x => x.EndsWith(".dll")).ToList();
+            return Directory.GetFiles(Application.StartupPath).Where(x => x.EndsWith(".dll") || (!excludeExe && x.EndsWith(".exe"))).ToList();
         }
     }
 }

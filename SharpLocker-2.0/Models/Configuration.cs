@@ -4,10 +4,10 @@ namespace SharpLocker_2._0.Models
 {
     public class Configuration
     {
-        private string placeholderText = "Password";
         private int minPasswordErrors = 1;
         private int maxPasswordErrors = 2;
         private int blur = 10;
+        private string defaultLanguage = "EN";
 
         /// <summary>
         /// Enables or disables the debug mode
@@ -36,29 +36,6 @@ namespace SharpLocker_2._0.Models
         /// Sets how a bright wallpaper will be dimmed
         /// </summary>
         public int DarknessIntensity { get; set; } = -80;
-
-        /// <summary>
-        /// The text that is displayed as placeholder.
-        /// If null or empty the default value is used
-        /// </summary>
-        public string PlaceholderText
-        {
-            get
-            {
-                return placeholderText;
-            }
-            set
-            {
-                if (string.IsNullOrEmpty(value))
-                {
-                    placeholderText = "Password";
-                }
-                else
-                {
-                    placeholderText = value;
-                }
-            }
-        }
 
         /// <summary>
         /// Value between >= 0 and <= MaxPasswordErrors.
@@ -100,5 +77,23 @@ namespace SharpLocker_2._0.Models
             }
         }
 
+        public string DefaultLanguage
+        {
+            get
+            {
+                return defaultLanguage;
+            }
+            set
+            {
+                if (string.IsNullOrEmpty(value))
+                {
+                    defaultLanguage = "EN";
+                }
+                else
+                {
+                    defaultLanguage = value;
+                }
+            }
+        }
     }
 }

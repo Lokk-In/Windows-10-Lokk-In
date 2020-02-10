@@ -65,11 +65,13 @@
             this.CapsLockLabel.BackColor = System.Drawing.Color.Transparent;
             this.CapsLockLabel.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.CapsLockLabel.ForeColor = System.Drawing.Color.White;
-            this.CapsLockLabel.Location = new System.Drawing.Point(342, 382);
+            this.CapsLockLabel.Location = new System.Drawing.Point(250, 380);
+            this.CapsLockLabel.MinimumSize = new System.Drawing.Size(300, 0);
             this.CapsLockLabel.Name = "CapsLockLabel";
-            this.CapsLockLabel.Size = new System.Drawing.Size(115, 20);
+            this.CapsLockLabel.Size = new System.Drawing.Size(300, 20);
             this.CapsLockLabel.TabIndex = 9;
             this.CapsLockLabel.Text = "Caps Lock is on";
+            this.CapsLockLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // ConnectionButton
             // 

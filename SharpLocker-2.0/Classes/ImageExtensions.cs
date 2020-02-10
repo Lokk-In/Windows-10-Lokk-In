@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace SharpLocker_2._0.Classes
 {
-    public static class ImageExtensions
+    internal static class ImageExtensions
     {
         // Resize any image to a certain size
         public static Image ResizeImage(this Image image, int width, int height)

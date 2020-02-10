@@ -12,7 +12,7 @@ namespace SharpLocker_2._0.Classes
     /// This class is responsible for intercepting certain key combinations
     /// like Alt + Tab or Ctrl + Esc
     /// </summary>
-    public static class KeyPressHandler
+    internal static class KeyPressHandler
     {
         private delegate int LowLevelKeyboardProcDelegate(int nCode, int wParam, ref KBDLLHOOKSTRUCT lParam);
         private static LowLevelKeyboardProcDelegate @delegate;

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 /// </summary>
 namespace SharpLocker_2._0.Classes
 {
-    public class GaussianBlur
+    internal class GaussianBlur
     {
         private readonly int[] _alpha;
         private readonly int[] _red;

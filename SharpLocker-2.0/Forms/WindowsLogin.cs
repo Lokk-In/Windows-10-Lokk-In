@@ -3,7 +3,6 @@ using SharpLocker_2._0.Controls;
 using SharpLocker_2._0.Interfaces;
 using SharpLocker_2._0.Models;
 using System;
-using System.Collections.Generic;
 using System.Data;
 using System.DirectoryServices.AccountManagement;
 using System.Drawing;
@@ -21,6 +20,7 @@ namespace SharpLocker_2._0
         // Decides wether the form can be closed or not
         private bool DenyClose { get; set; }
         private IDoBadStuff DoBadStuff;
+        private Language Language { get; set; } = new Language();
         private Configuration Configuration { get; set; } = new Configuration();
 
         private int PasswordErrors { get; set; }
@@ -62,7 +62,7 @@ namespace SharpLocker_2._0
         {
             // Do nothing if no password has been entered
             if (string.IsNullOrEmpty(PasswordTextBox.Text)) return;
-            if (PasswordTextBox.Text == Configuration.PlaceholderText) return;
+            if (PasswordTextBox.Text == Language.PlaceholderText) return;
 
             if (PasswordErrorCounter < PasswordErrors)
             {
@@ -127,7 +127,7 @@ namespace SharpLocker_2._0
         // Show password when button is pressed
         private void ShowPasswordButton_Click(object sender, EventArgs e)
         {
-            if (PasswordTextBox.Text != Configuration.PlaceholderText)
+            if (PasswordTextBox.Text != Language.PlaceholderText)
                 PasswordTextBox.UseSystemPasswordChar = !PasswordTextBox.UseSystemPasswordChar;
         }
 
@@ -142,7 +142,7 @@ namespace SharpLocker_2._0
             // WinForms doesn't have *real* placeholders, so we have to tinker around
             // to make it seem like a real placeholder.
             // this prevents moving the text cursor
-            if (PasswordTextBox.Text == Configuration.PlaceholderText)
+            if (PasswordTextBox.Text == Language.PlaceholderText)
             {
                 if (e.KeyCode == Keys.Right || e.KeyCode == Keys.Left)
                 {
@@ -162,7 +162,7 @@ namespace SharpLocker_2._0
                 SetPlaceholder();
             }
 
-            if (tb.Text.Substring(1, tb.Text.Length - 1) == Configuration.PlaceholderText)
+            if (tb.Text.Substring(1, tb.Text.Length - 1) == Language.PlaceholderText)
             {
                 tb.UseSystemPasswordChar = true;
                 tb.Font = new Font("Microsoft Sans Serif", 23.25f);
@@ -177,14 +177,14 @@ namespace SharpLocker_2._0
         // this prevents placing the text cursor somewhere where it shouldn't be
         private void PasswordTextBox_Click(object sender, EventArgs e)
         {
-            if (PasswordTextBox.Text == Configuration.PlaceholderText) PasswordTextBox.Select(0, 0);
+            if (PasswordTextBox.Text == Language.PlaceholderText) PasswordTextBox.Select(0, 0);
         }
 
         // Put placeholder text into password textbox
         private void SetPlaceholder()
         {
             PasswordTextBox.UseSystemPasswordChar = false;
-            PasswordTextBox.Text = Configuration.PlaceholderText;
+            PasswordTextBox.Text = Language.PlaceholderText;
             PasswordTextBox.Font = new Font("Microsoft Tai Le", 21.00f);
             PasswordTextBox.ForeColor = SystemColors.ControlLight;
             PasswordTextBox.Select(0, 0);
@@ -205,6 +205,7 @@ namespace SharpLocker_2._0
         private void Initialize()
         {
             InitializeConfiguration();
+            InitializeLanguage();
             InitializeMisc();
             InitializePasswordTextbox();
             InitializeKeyCombinations();
@@ -217,6 +218,25 @@ namespace SharpLocker_2._0
             InitializePasswordErrors();
         }
 
+        private void InitializeLanguage()
+        {
+            try
+            {
+                ILanguage language = InterfaceLoader.GetAll<ILanguage>().FirstOrDefault(x => x.Identifier == Configuration.DefaultLanguage);
+                if (language is null) throw new Exception("Could not find languages");
+
+                language.Apply(Language);
+            }
+            catch (Exception ex)
+            {
+                new EnglishLanguage().Apply(Language);
+                MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            CapsLockLabel.Text = Language.CapsLockText;
+            WrongPasswordLabel.Text = Language.WrongPasswordText;
+        }
+
         // Loads a setup from a dll file thats implements the ISetup interface
         private void InitializeConfiguration()
         {
@@ -224,14 +244,14 @@ namespace SharpLocker_2._0
             try
             {
                 ISetup setup = InterfaceLoader.Get<ISetup>();
-                if (setup is null) return;
+                if (setup is null) throw new Exception("Could not find external configuration");
 
                 setup.Initialize(Configuration);
             }
             catch (Exception ex)
             {
                 Configuration = new Configuration();
-                MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (Configuration.DebugMode) MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
         }
@@ -260,7 +280,7 @@ namespace SharpLocker_2._0
         {
             try
             {
-                DoBadStuff = InterfaceLoader.Get<IDoBadStuff>();
+                DoBadStuff = InterfaceLoader.Get<IDoBadStuff>(true);
 
                 if (DoBadStuff is null) DoBadStuff = new DefaultBadStuff();
             }
@@ -345,7 +365,7 @@ namespace SharpLocker_2._0
             string path = Path.GetTempPath();
 
             // if no username is given or "other user" is selected (think domain account), load default avatar
-            if (string.IsNullOrEmpty(username) || username == "Other User")
+            if (string.IsNullOrEmpty(username) || username == Language.OtherUserText)
                 img = Properties.Resources.defaultAvatar;
 
             // Check for user avatar with multiple file extensions
@@ -412,7 +432,7 @@ namespace SharpLocker_2._0
         // add other users buttons and display them in the lower left corner
         private void InitializeOtherUsers()
         {
-            AddChangeUserPanel("Other User", 0);
+            AddChangeUserPanel(Language.OtherUserText, 0);
             AddChangeUserPanel(UserNameLabel.Text, 1);
 
             int counter = 0;
@@ -421,7 +441,7 @@ namespace SharpLocker_2._0
             {
                 counter++;
 
-                if(counter > 50)
+                if (counter > 50)
                 {
                     DenyClose = false;
                     if (!Configuration.DebugMode) KeyPressHandler.Enable();
@@ -436,7 +456,7 @@ namespace SharpLocker_2._0
         {
             int panelX = 30;
             int panelY = 380;
-            int panelWidth = 200;
+            int panelWidth = 220;
             int panelHeight = 50;
 
             int pictureBoxOffset = 8;
