@@ -7,7 +7,7 @@ namespace SharpLocker_2._0.Models
         private int minPasswordErrors = 1;
         private int maxPasswordErrors = 2;
         private int blur = 10;
-        private string defaultLanguage = "EN";
+        private string defaultLanguage = System.Globalization.CultureInfo.CurrentCulture.ThreeLetterWindowsLanguageName;
 
         /// <summary>
         /// Enables or disables the debug mode

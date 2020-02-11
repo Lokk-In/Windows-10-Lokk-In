@@ -52,6 +52,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\ControlFactory.cs" />
+    <Compile Include="Controls\PaddinglessButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Models\EnglishLanguage.cs" />
     <Compile Include="Interfaces\ILanguage.cs" />
     <Compile Include="Models\Configuration.cs" />

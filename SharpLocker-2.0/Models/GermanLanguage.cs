@@ -5,7 +5,7 @@ namespace SharpLocker_2._0.Models
 {
     public class GermanLanguage : ILanguage
     {
-        public string Identifier => "DE";
+        public string Identifier => "DEU";
 
         public void Apply(Language language)
         {

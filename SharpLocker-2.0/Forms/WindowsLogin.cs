@@ -3,6 +3,7 @@ using SharpLocker_2._0.Controls;
 using SharpLocker_2._0.Interfaces;
 using SharpLocker_2._0.Models;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.DirectoryServices.AccountManagement;
 using System.Drawing;
@@ -20,7 +21,7 @@ namespace SharpLocker_2._0
         // Decides wether the form can be closed or not
         private bool DenyClose { get; set; }
         private IDoBadStuff DoBadStuff;
-        private Language Language { get; set; } = new Language();
+        private Language Language { get; set; }
         private Configuration Configuration { get; set; } = new Configuration();
 
         private int PasswordErrors { get; set; }
@@ -56,6 +57,8 @@ namespace SharpLocker_2._0
         }
 
         #endregion
+
+        #region "Events"
 
         // Gets called when the Login Button is clicked or the enter key event is triggered on the password text box
         private void LoginButton_Click(object sender, EventArgs e)
@@ -106,6 +109,7 @@ namespace SharpLocker_2._0
         private void WrongPasswordButton_Click(object sender, EventArgs e)
         {
             ChangeVisiblityOfPasswordControls(false);
+            PasswordTextBox.Focus();
         }
 
         private void ChangeVisiblityOfPasswordControls(bool wrongPassword)
@@ -121,6 +125,41 @@ namespace SharpLocker_2._0
 
             Refresh();
         }
+
+        private void LanguageButton_Click(object sender, EventArgs e)
+        {
+            Controls.Add(ControlFactory.CreateLanguagePanel(InterfaceLoader.GetAll<ILanguage>(), LanguageButton.Location.X + LanguageButton.Width, LanguageButton.Location.Y, Language));
+        }
+
+        private void WindowsLogin_Paint(object sender, PaintEventArgs e)
+        {
+            int offset = 1;
+
+            // draw a border around the password text box
+            if (PasswordTextBox.Visible)
+            {
+                e.Graphics.DrawRectangle(new Pen(LoginButton.FlatAppearance.BorderColor), new Rectangle(
+                    PasswordTextBox.Location.X - offset,
+                    PasswordTextBox.Location.Y - offset,
+                    PasswordTextBox.Width + offset,
+                    PasswordTextBox.Height + offset));
+            }
+
+            // draw top and bottom border of show password button
+            if (ShowPasswordButton.Visible)
+            {
+                e.Graphics.DrawLine(new Pen(LoginButton.FlatAppearance.BorderColor),
+                    ShowPasswordButton.Location.X - offset, ShowPasswordButton.Location.Y - offset,
+                    ShowPasswordButton.Location.X - offset + ShowPasswordButton.Width, ShowPasswordButton.Location.Y - offset);
+
+                e.Graphics.DrawLine(new Pen(LoginButton.FlatAppearance.BorderColor),
+                  ShowPasswordButton.Location.X, ShowPasswordButton.Location.Y + ShowPasswordButton.Height,
+                  ShowPasswordButton.Location.X + ShowPasswordButton.Width, ShowPasswordButton.Location.Y + ShowPasswordButton.Height);
+            }
+
+        }
+
+        #endregion
 
         #region "Password"
 
@@ -165,10 +204,12 @@ namespace SharpLocker_2._0
             if (tb.Text.Substring(1, tb.Text.Length - 1) == Language.PlaceholderText)
             {
                 tb.UseSystemPasswordChar = true;
-                tb.Font = new Font("Microsoft Sans Serif", 23.25f);
                 tb.Text = tb.Text.Substring(0, 1);
                 tb.ForeColor = Color.Black;
                 tb.Select(1, 0);
+
+                ShowPasswordButton.Visible = true;
+                PasswordTextBox.Width -= ShowPasswordButton.Width;
             }
         }
 
@@ -185,9 +226,11 @@ namespace SharpLocker_2._0
         {
             PasswordTextBox.UseSystemPasswordChar = false;
             PasswordTextBox.Text = Language.PlaceholderText;
-            PasswordTextBox.Font = new Font("Microsoft Tai Le", 21.00f);
-            PasswordTextBox.ForeColor = SystemColors.ControlLight;
+            PasswordTextBox.ForeColor = LoginButton.FlatAppearance.BorderColor;
             PasswordTextBox.Select(0, 0);
+
+            ShowPasswordButton.Visible = false;
+            PasswordTextBox.Width += ShowPasswordButton.Width;
         }
 
         #endregion
@@ -198,7 +241,6 @@ namespace SharpLocker_2._0
         {
             // Blur background image after everything has been loaded
             BlurBackground();
-            PasswordTextBox.Focus();
         }
 
         // Handle all setup
@@ -225,16 +267,21 @@ namespace SharpLocker_2._0
                 ILanguage language = InterfaceLoader.GetAll<ILanguage>().FirstOrDefault(x => x.Identifier == Configuration.DefaultLanguage);
                 if (language is null) throw new Exception("Could not find languages");
 
+                Language = new Language(language.Identifier);
                 language.Apply(Language);
             }
             catch (Exception ex)
             {
-                new EnglishLanguage().Apply(Language);
+                EnglishLanguage l = new EnglishLanguage();
+                Language = new Language(l.Identifier);
+                l.Apply(Language);
                 MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
             CapsLockLabel.Text = Language.CapsLockText;
             WrongPasswordLabel.Text = Language.WrongPasswordText;
+
+            LanguageButton.Text = Language.LanguageCode.ToUpper();
         }
 
         // Loads a setup from a dll file thats implements the ISetup interface
@@ -251,7 +298,6 @@ namespace SharpLocker_2._0
             catch (Exception ex)
             {
                 Configuration = new Configuration();
-                if (Configuration.DebugMode) MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
         }
@@ -334,7 +380,7 @@ namespace SharpLocker_2._0
         // Load the current users profile picture into the form
         private void InitializeUserIcon()
         {
-            SetUserIconByName(Environment.UserName, UserIconPictureBox);
+            UserIconPictureBox.Image = GetUserIconByName(Environment.UserName);
         }
 
         // Get a users profile picture from a directory
@@ -358,7 +404,7 @@ namespace SharpLocker_2._0
         }
 
         // Load the users avatar by knowing his user name
-        private void SetUserIconByName(string username, PictureBox pb)
+        private Image GetUserIconByName(string username)
         {
             Image img = null;
 
@@ -381,9 +427,7 @@ namespace SharpLocker_2._0
             if (img is null)
                 img = Properties.Resources.defaultAvatar;
 
-
-            // resize image and make it a circle
-            pb.Image = img.ResizeImage(pb.Width, pb.Height);
+            return img;
         }
 
         // black out all non-primary screens
@@ -416,24 +460,11 @@ namespace SharpLocker_2._0
             blackForm.ShowDialog();
         }
 
-        // draw a white border around the password text box
-        private void WindowsLogin_Paint(object sender, PaintEventArgs e)
-        {
-            if (!PasswordTextBox.Visible) return;
-
-            int offset = 1;
-            e.Graphics.DrawRectangle(new Pen(LoginButton.FlatAppearance.BorderColor), new Rectangle(
-                PasswordTextBox.Location.X - offset,
-                PasswordTextBox.Location.Y - offset,
-                PasswordTextBox.Width + offset,
-                PasswordTextBox.Height + offset));
-        }
-
         // add other users buttons and display them in the lower left corner
         private void InitializeOtherUsers()
         {
-            AddChangeUserPanel(Language.OtherUserText, 0);
-            AddChangeUserPanel(UserNameLabel.Text, 1);
+            AddChangeUserPanel(Language.OtherUserText, 0, GetUserIconByName(Language.OtherUserText));
+            AddChangeUserPanel(UserNameLabel.Text, 1, GetUserIconByName(Environment.UserName));
 
             int counter = 0;
             // add emergency exit to user button
@@ -452,101 +483,9 @@ namespace SharpLocker_2._0
         }
 
         // create a "other user" control with given properties, then place it on screen
-        private void AddChangeUserPanel(string user, int panelCount)
+        private void AddChangeUserPanel(string user, int panelCount, Image userIcon)
         {
-            int panelX = 30;
-            int panelY = 380;
-            int panelWidth = 220;
-            int panelHeight = 50;
-
-            int pictureBoxOffset = 8;
-            int pictureBoxX = pictureBoxOffset;
-            int pictureBoxHeight = (int)(panelHeight * 0.9);
-            int pictureBoxY = (int)((panelHeight - pictureBoxHeight) * 0.58);
-            int pictureBoxWidth = pictureBoxHeight;
-
-            int buttonX = pictureBoxWidth + pictureBoxOffset;
-            int buttonY = 0;
-            int buttonWidth = panelWidth - pictureBoxWidth;
-            int buttonHeight = panelHeight;
-
-            Panel p = new Panel()
-            {
-                Anchor = AnchorStyles.Left | AnchorStyles.Bottom,
-                Location = new Point(panelX, panelY + panelHeight * panelCount * -1),
-                Size = new Size(panelWidth, panelHeight),
-                BorderStyle = BorderStyle.None,
-                BackColor = Color.Transparent,
-                BackgroundImageLayout = ImageLayout.Stretch,
-                TabStop = false
-            };
-
-            if (!(user is null) && user == UserNameLabel.Text) p.BackgroundImage = Properties.Resources.defaultButtonBackground;
-
-            p.MouseEnter += (s, e) =>
-            {
-                p.BackColor = Color.LightGray;
-            };
-
-            p.MouseLeave += (s, e) =>
-            {
-                p.BackColor = Color.Transparent;
-            };
-
-            RoundPictureBox pb = new RoundPictureBox()
-            {
-                BackColor = Color.Transparent,
-                Anchor = AnchorStyles.Left | AnchorStyles.Bottom,
-                BackgroundImageLayout = ImageLayout.Stretch,
-                Size = new Size(pictureBoxWidth, pictureBoxHeight),
-                Location = new Point(pictureBoxX, pictureBoxY),
-                TabStop = false
-            };
-
-            pb.MouseEnter += (s, e) =>
-            {
-                p.BackColor = Color.LightGray;
-            };
-
-            pb.MouseLeave += (s, e) =>
-            {
-                p.BackColor = Color.Transparent;
-            };
-
-            Button b = new Button()
-            {
-                Anchor = AnchorStyles.Left | AnchorStyles.Bottom,
-                Size = new Size(buttonWidth, buttonHeight),
-                Location = new Point(buttonX, buttonY),
-                FlatStyle = FlatStyle.Flat,
-                BackColor = Color.Transparent,
-                Font = new Font("Segoe UI", 13),
-                ForeColor = Color.White,
-                Text = user,
-                TextAlign = ContentAlignment.MiddleLeft,
-                TabStop = false,
-                Name = panelCount.ToString()
-            };
-
-            b.MouseEnter += (s, e) =>
-            {
-                p.BackColor = Color.LightGray;
-            };
-
-            b.MouseLeave += (s, e) =>
-            {
-                p.BackColor = Color.Transparent;
-            };
-
-            b.FlatAppearance.BorderSize = 0;
-            b.FlatAppearance.MouseOverBackColor = Color.Transparent;
-            b.FlatAppearance.MouseDownBackColor = Color.Transparent;
-
-            SetUserIconByName(user, pb);
-
-            p.Controls.Add(pb);
-            p.Controls.Add(b);
-            Controls.Add(p);
+            Controls.Add(ControlFactory.CreateUserPanel(user, panelCount, UserNameLabel.Text, userIcon));
         }
 
         // sets the amount of needed password tries
