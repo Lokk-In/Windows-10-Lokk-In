@@ -97,7 +97,7 @@ namespace SharpLocker_2._0.Models
             {
                 if (string.IsNullOrEmpty(value))
                 {
-                    defaultLanguage = "EN";
+                    defaultLanguage = System.Globalization.CultureInfo.CurrentCulture.ThreeLetterWindowsLanguageName;
                 }
                 else
                 {

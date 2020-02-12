@@ -13,6 +13,7 @@ namespace SharpLocker_2._0.Models
             language.PlaceholderText = "Password";
             language.WrongPasswordText = @"That password is incorrect. Make sure you're using the password for your Microsoft account. If you can't remember your password, you can 
 reset it from the lock screen or at account.live.com/password/reset.";
+            language.Keyboard = "Keyboard";
         }
     }
 }

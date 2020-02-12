@@ -128,7 +128,11 @@ namespace SharpLocker_2._0
 
         private void LanguageButton_Click(object sender, EventArgs e)
         {
-            Controls.Add(ControlFactory.CreateLanguagePanel(InterfaceLoader.GetAll<ILanguage>(), LanguageButton.Location.X + LanguageButton.Width, LanguageButton.Location.Y, Language));
+            try
+            {
+                Controls.Find("languagePanel", true).FirstOrDefault().Visible = !Controls.Find("languagePanel", true).FirstOrDefault().Visible;
+            }
+            catch { }
         }
 
         private void WindowsLogin_Paint(object sender, PaintEventArgs e)
@@ -260,6 +264,7 @@ namespace SharpLocker_2._0
             InitializePasswordErrors();
         }
 
+        // Loads all languages
         private void InitializeLanguage()
         {
             try
@@ -275,13 +280,15 @@ namespace SharpLocker_2._0
                 EnglishLanguage l = new EnglishLanguage();
                 Language = new Language(l.Identifier);
                 l.Apply(Language);
-                MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
             CapsLockLabel.Text = Language.CapsLockText;
             WrongPasswordLabel.Text = Language.WrongPasswordText;
 
             LanguageButton.Text = Language.LanguageCode.ToUpper();
+
+            Controls.Add(ControlFactory.CreateLanguagePanel("languagePanel", InterfaceLoader.GetAll<ILanguage>(), LanguageButton.Location.X + LanguageButton.Width, LanguageButton.Location.Y, Language));
+
         }
 
         // Loads a setup from a dll file thats implements the ISetup interface

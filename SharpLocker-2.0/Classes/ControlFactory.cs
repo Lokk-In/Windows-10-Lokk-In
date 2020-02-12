@@ -6,8 +6,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace SharpLocker_2._0.Classes
@@ -134,14 +132,14 @@ namespace SharpLocker_2._0.Classes
             return b;
         }
 
-        public static Panel CreateLanguagePanel(List<ILanguage> languages, int x, int y, Language currentLanguage)
+        public static Panel CreateLanguagePanel(string name, List<ILanguage> languages, int x, int y, Language currentLanguage)
         {
             int panelWidth = 300;
             int panelSingleHeight = 40;
             int panelSingleOffset = 5;
             int panelHeight = panelSingleHeight * languages.Count() + panelSingleOffset * 2;
-            x = x - panelWidth;
-            y = y - panelHeight;
+            x -= panelWidth;
+            y -= panelHeight;
 
             Panel p = new Panel()
             {
@@ -151,26 +149,21 @@ namespace SharpLocker_2._0.Classes
                 BorderStyle = BorderStyle.None,
                 BackColor = SystemColors.WindowFrame,
                 BackgroundImageLayout = ImageLayout.Stretch,
-                TabStop = false
+                TabStop = false,
+                Name = name
             };
 
             languages.Reverse();
 
             for (int i = 0; i < languages.Count(); i++)
             {
-                p.Controls.Add(CreateSingleLanguagePanel(languages[i], i, panelWidth, panelSingleHeight, panelSingleOffset, currentLanguage, p));
+                p.Controls.Add(CreateSingleLanguagePanel(languages[i], i, panelWidth, panelSingleHeight, panelSingleOffset, currentLanguage));
             }
-
-            p.MouseLeave += (s, e) =>
-            {
-                Rectangle hitbox = new Rectangle(x, y, panelWidth, panelHeight);
-                if (!hitbox.Contains(Cursor.Position.X, Cursor.Position.Y)) p.Dispose();
-            };
 
             return p;
         }
 
-        private static Panel CreateSingleLanguagePanel(ILanguage language, int count, int width, int height, int offset, Language currentLanguage, Panel parent)
+        private static Panel CreateSingleLanguagePanel(ILanguage language, int count, int width, int height, int offset, Language currentLanguage)
         {
             Panel p = new Panel()
             {
@@ -185,37 +178,44 @@ namespace SharpLocker_2._0.Classes
 
             if (language.Identifier == currentLanguage.LanguageCode) p.BackgroundImage = Properties.Resources.defaultButtonBackground;
 
-            p.MouseLeave += (s, e) =>
-            {
-                Rectangle hitbox = new Rectangle(parent.Location.X, parent.Location.Y, parent.Width, parent.Height);
-                if (!hitbox.Contains(Cursor.Position.X, Cursor.Position.Y)) parent.Dispose();
-            };
+            CultureInfo c = CultureInfo.GetCultures(CultureTypes.AllCultures).Where(i => i.ThreeLetterWindowsLanguageName == language.Identifier).FirstOrDefault();
 
-            p.Controls.Add(GetSingleLanguageLabel(width, height, language, currentLanguage));
+            if (c is null) c = CultureInfo.CurrentCulture;
+
+            p.Controls.Add(GetSingleLanguageLabel(p, (int)(width * 0.2), height, 0, 0, c.ThreeLetterWindowsLanguageName, true));
+            p.Controls.Add(GetSingleLanguageLabel(p, (int)(width * 0.8), height, (int)(width * 0.2), 0, $"{c.NativeName}{Environment.NewLine}{InputLanguage.CurrentInputLanguage.LayoutName}-{currentLanguage.Keyboard}", false));
 
             return p;
         }
 
-        private static Label GetSingleLanguageLabel(int width, int height, ILanguage language, Language currentLanguage)
+        private static Label GetSingleLanguageLabel(Panel parent, int width, int height, int x, int y, string text, bool bold)
         {
-
-            CultureInfo c = CultureInfo.GetCultures(CultureTypes.AllCultures).Where(x => x.ThreeLetterWindowsLanguageName == language.Identifier).FirstOrDefault();
-
-            if (c is null) c = CultureInfo.CurrentCulture;
 
             Label l = new Label()
             {
                 Anchor = AnchorStyles.Right | AnchorStyles.Bottom,
-                Location = new Point(0, 0),
-                Size = new Size(width, height),
+                Location = new Point(x + 1, y),
+                Size = new Size(width - 2, height),
                 BorderStyle = BorderStyle.None,
                 BackColor = Color.Transparent,
                 BackgroundImageLayout = ImageLayout.Stretch,
                 TabStop = false,
-                Font = new Font("Segoe UI", 11.25f, FontStyle.Bold),
+                Font = new Font("Segoe UI", 11.25f),
                 ForeColor = Color.White,
-                Text = $"{c.ThreeLetterWindowsLanguageName}      {c.NativeName}{Environment.NewLine}         { c.KeyboardLayoutId}"
+                Text = text
             };
+
+            l.MouseEnter += (s, e) =>
+            {
+                parent.BackColor = Color.LightGray;
+            };
+
+            l.MouseLeave += (s, e) =>
+            {
+                parent.BackColor = Color.Transparent;
+            };
+
+            if (bold) l.Font = new Font("Segoe UI", 11.25f, FontStyle.Bold);
 
             return l;
         }

@@ -58,5 +58,10 @@ namespace SharpLocker_2._0.Models
         /// 3 digit language code
         /// </summary>
         public string LanguageCode { get { return code; } }
+
+        /// <summary>
+        /// Keyboard in target language
+        /// </summary>
+        public string Keyboard { get; set; } = "Keyboard";
     }
 }
