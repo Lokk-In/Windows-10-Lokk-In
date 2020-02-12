@@ -10,6 +10,16 @@ namespace SharpLocker_2._0.Models
         private string defaultLanguage = System.Globalization.CultureInfo.CurrentCulture.ThreeLetterWindowsLanguageName;
 
         /// <summary>
+        /// Aquires the user display name using UserPrincipal when set to true. This might take some time depending on the system or domain. The average time is around 0.5 to 2 seconds but peaks above 10 seconds where measured as well.
+        /// </summary>
+        public bool UseUserPrincipal { get; set; } = true;
+
+        /// <summary>
+        /// Time in seconds after the getting the user display name is aborted. The user name is then used instead.
+        /// </summary>
+        public double UserPrincipalTimeout { get; set; } = 3;
+
+        /// <summary>
         /// Enables or disables the debug mode
         /// </summary>
         public bool DebugMode { get; set; } = false;

