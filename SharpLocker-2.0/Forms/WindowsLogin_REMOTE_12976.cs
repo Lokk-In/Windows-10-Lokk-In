@@ -370,19 +370,13 @@ namespace Windows10LokkIn
         {
             try
             {
-                UserNameLabel.Text = Environment.UserName;
-
                 if (Configuration.UseUserPrincipal)
                 {
                     DateTime startTime = DateTime.Now;
 
                     Task t = new Task(() =>
                     {
-                        try
-                        {
-                            UserNameLabel.Text = UserPrincipal.Current.DisplayName;
-                        }
-                        catch { }
+                        UserNameLabel.Text = UserPrincipal.Current.DisplayName;
                     });
 
                     t.Start();
@@ -394,6 +388,10 @@ namespace Windows10LokkIn
                         else if (t.IsCompleted) break;
                     }
 
+                }
+                else
+                {
+                    UserNameLabel.Text = Environment.UserName;
                 }
             }
             catch
@@ -477,7 +475,6 @@ namespace Windows10LokkIn
 
             return img;
         }
-
 
         // black out all non-primary screens
         private void InitializeOtherScreens()

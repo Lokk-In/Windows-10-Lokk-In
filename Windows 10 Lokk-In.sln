@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29613.14
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpLocker-2.0", "SharpLocker-2.0\SharpLocker-2.0.csproj", "{03001669-84D1-413E-9EE3-73CE0F327B0D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Windows 10 Lokk-In", "SharpLocker-2.0\Windows 10 Lokk-In.csproj", "{03001669-84D1-413E-9EE3-73CE0F327B0D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

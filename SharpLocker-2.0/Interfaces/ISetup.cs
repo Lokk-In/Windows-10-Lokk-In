@@ -2,8 +2,8 @@
 
 namespace Windows10LokkIn.Interfaces
 {
-    public interface IDoBadStuff
+    public interface ISetup
     {
-        void Now(Result result);
+        void Initialize(Configuration configuration);
     }
 }

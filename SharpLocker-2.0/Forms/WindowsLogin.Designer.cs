@@ -1,4 +1,4 @@
-﻿namespace SharpLocker_2._0
+﻿namespace Windows10LokkIn
 {
     partial class WindowsLogin
     {
@@ -36,8 +36,11 @@
             this.PowerButton = new System.Windows.Forms.Button();
             this.LoginButton = new System.Windows.Forms.Button();
             this.ShowPasswordButton = new System.Windows.Forms.Button();
-            this.PasswordTextBox = new SharpLocker_2._0.Classes.NoBaloonTipTextbox();
-            this.UserIconPictureBox = new SharpLocker_2._0.Classes.RoundPictureBox();
+            this.WrongPasswordLabel = new System.Windows.Forms.Label();
+            this.WrongPasswordButton = new System.Windows.Forms.Button();
+            this.LanguageButton = new Windows10LokkIn.Controls.PaddinglessButton();
+            this.PasswordTextBox = new Windows10LokkIn.Controls.NoBaloonTipTextbox();
+            this.UserIconPictureBox = new Windows10LokkIn.Controls.RoundPictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.UserIconPictureBox)).BeginInit();
             this.SuspendLayout();
             // 
@@ -63,18 +66,20 @@
             this.CapsLockLabel.BackColor = System.Drawing.Color.Transparent;
             this.CapsLockLabel.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.CapsLockLabel.ForeColor = System.Drawing.Color.White;
-            this.CapsLockLabel.Location = new System.Drawing.Point(342, 382);
+            this.CapsLockLabel.Location = new System.Drawing.Point(250, 380);
+            this.CapsLockLabel.MinimumSize = new System.Drawing.Size(300, 0);
             this.CapsLockLabel.Name = "CapsLockLabel";
-            this.CapsLockLabel.Size = new System.Drawing.Size(115, 20);
+            this.CapsLockLabel.Size = new System.Drawing.Size(300, 20);
             this.CapsLockLabel.TabIndex = 9;
             this.CapsLockLabel.Text = "Caps Lock is on";
+            this.CapsLockLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // ConnectionButton
             // 
             this.ConnectionButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.ConnectionButton.AutoSize = true;
             this.ConnectionButton.BackColor = System.Drawing.Color.Transparent;
-            this.ConnectionButton.BackgroundImage = global::SharpLocker_2._0.Properties.Resources.ethernet;
+            this.ConnectionButton.BackgroundImage = global::Windows10LokkIn.Properties.Resources.ethernet;
             this.ConnectionButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ConnectionButton.FlatAppearance.BorderColor = System.Drawing.Color.SkyBlue;
             this.ConnectionButton.FlatAppearance.BorderSize = 0;
@@ -92,7 +97,7 @@
             this.EaseOfAccessButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.EaseOfAccessButton.AutoSize = true;
             this.EaseOfAccessButton.BackColor = System.Drawing.Color.Transparent;
-            this.EaseOfAccessButton.BackgroundImage = global::SharpLocker_2._0.Properties.Resources.easeOfAccess;
+            this.EaseOfAccessButton.BackgroundImage = global::Windows10LokkIn.Properties.Resources.easeOfAccess;
             this.EaseOfAccessButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.EaseOfAccessButton.FlatAppearance.BorderColor = System.Drawing.Color.SkyBlue;
             this.EaseOfAccessButton.FlatAppearance.BorderSize = 0;
@@ -110,7 +115,7 @@
             this.PowerButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.PowerButton.AutoSize = true;
             this.PowerButton.BackColor = System.Drawing.Color.Transparent;
-            this.PowerButton.BackgroundImage = global::SharpLocker_2._0.Properties.Resources.power;
+            this.PowerButton.BackgroundImage = global::Windows10LokkIn.Properties.Resources.power;
             this.PowerButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.PowerButton.FlatAppearance.BorderColor = System.Drawing.Color.SkyBlue;
             this.PowerButton.FlatAppearance.BorderSize = 0;
@@ -128,13 +133,13 @@
             this.LoginButton.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.LoginButton.AutoSize = true;
             this.LoginButton.BackColor = System.Drawing.Color.Transparent;
-            this.LoginButton.BackgroundImage = global::SharpLocker_2._0.Properties.Resources.login;
+            this.LoginButton.BackgroundImage = global::Windows10LokkIn.Properties.Resources.login;
             this.LoginButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.LoginButton.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.LoginButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.LoginButton.Location = new System.Drawing.Point(542, 342);
+            this.LoginButton.Location = new System.Drawing.Point(505, 342);
             this.LoginButton.Name = "LoginButton";
-            this.LoginButton.Size = new System.Drawing.Size(38, 38);
+            this.LoginButton.Size = new System.Drawing.Size(29, 29);
             this.LoginButton.TabIndex = 1;
             this.LoginButton.TabStop = false;
             this.LoginButton.UseVisualStyleBackColor = false;
@@ -148,30 +153,80 @@
             this.ShowPasswordButton.BackColor = System.Drawing.SystemColors.Window;
             this.ShowPasswordButton.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("ShowPasswordButton.BackgroundImage")));
             this.ShowPasswordButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ShowPasswordButton.FlatAppearance.BorderColor = System.Drawing.Color.WhiteSmoke;
+            this.ShowPasswordButton.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.ShowPasswordButton.FlatAppearance.BorderSize = 0;
             this.ShowPasswordButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.ShowPasswordButton.ForeColor = System.Drawing.Color.Transparent;
-            this.ShowPasswordButton.Location = new System.Drawing.Point(504, 342);
+            this.ShowPasswordButton.ForeColor = System.Drawing.SystemColors.WindowFrame;
+            this.ShowPasswordButton.Location = new System.Drawing.Point(476, 343);
             this.ShowPasswordButton.Margin = new System.Windows.Forms.Padding(0);
             this.ShowPasswordButton.Name = "ShowPasswordButton";
-            this.ShowPasswordButton.Size = new System.Drawing.Size(38, 38);
+            this.ShowPasswordButton.Size = new System.Drawing.Size(29, 27);
             this.ShowPasswordButton.TabIndex = 17;
             this.ShowPasswordButton.TabStop = false;
             this.ShowPasswordButton.UseVisualStyleBackColor = false;
             this.ShowPasswordButton.Click += new System.EventHandler(this.ShowPasswordButton_Click);
             // 
+            // WrongPasswordLabel
+            // 
+            this.WrongPasswordLabel.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.WrongPasswordLabel.AutoSize = true;
+            this.WrongPasswordLabel.BackColor = System.Drawing.Color.Transparent;
+            this.WrongPasswordLabel.Font = new System.Drawing.Font("Segoe UI Semibold", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.WrongPasswordLabel.ForeColor = System.Drawing.Color.White;
+            this.WrongPasswordLabel.Location = new System.Drawing.Point(-61, 337);
+            this.WrongPasswordLabel.Name = "WrongPasswordLabel";
+            this.WrongPasswordLabel.Size = new System.Drawing.Size(962, 40);
+            this.WrongPasswordLabel.TabIndex = 18;
+            this.WrongPasswordLabel.Text = resources.GetString("WrongPasswordLabel.Text");
+            // 
+            // WrongPasswordButton
+            // 
+            this.WrongPasswordButton.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.WrongPasswordButton.AutoSize = true;
+            this.WrongPasswordButton.BackColor = System.Drawing.Color.Transparent;
+            this.WrongPasswordButton.BackgroundImage = global::Windows10LokkIn.Properties.Resources.defaultButtonBackground;
+            this.WrongPasswordButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.WrongPasswordButton.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.WrongPasswordButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.WrongPasswordButton.Font = new System.Drawing.Font("Segoe UI Semibold", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.WrongPasswordButton.ForeColor = System.Drawing.Color.White;
+            this.WrongPasswordButton.Location = new System.Drawing.Point(347, 385);
+            this.WrongPasswordButton.Name = "WrongPasswordButton";
+            this.WrongPasswordButton.Size = new System.Drawing.Size(110, 32);
+            this.WrongPasswordButton.TabIndex = 19;
+            this.WrongPasswordButton.TabStop = false;
+            this.WrongPasswordButton.Text = "OK";
+            this.WrongPasswordButton.UseVisualStyleBackColor = false;
+            this.WrongPasswordButton.Click += new System.EventHandler(this.WrongPasswordButton_Click);
+            // 
+            // LanguageButton
+            // 
+            this.LanguageButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.LanguageButton.BackColor = System.Drawing.Color.Transparent;
+            this.LanguageButton.FlatAppearance.BorderSize = 0;
+            this.LanguageButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.LanguageButton.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LanguageButton.ForeColor = System.Drawing.Color.White;
+            this.LanguageButton.Location = new System.Drawing.Point(580, 380);
+            this.LanguageButton.MaximumSize = new System.Drawing.Size(40, 40);
+            this.LanguageButton.Name = "LanguageButton";
+            this.LanguageButton.Size = new System.Drawing.Size(40, 40);
+            this.LanguageButton.TabIndex = 21;
+            this.LanguageButton.Text = "ENG";
+            this.LanguageButton.UseVisualStyleBackColor = false;
+            this.LanguageButton.Click += new System.EventHandler(this.LanguageButton_Click);
+            // 
             // PasswordTextBox
             // 
             this.PasswordTextBox.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.PasswordTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.PasswordTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 23.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.PasswordTextBox.Font = new System.Drawing.Font("Segoe Condensed", 17.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.PasswordTextBox.ForeColor = System.Drawing.SystemColors.WindowFrame;
-            this.PasswordTextBox.Location = new System.Drawing.Point(214, 343);
+            this.PasswordTextBox.Location = new System.Drawing.Point(254, 343);
             this.PasswordTextBox.Name = "PasswordTextBox";
             this.PasswordTextBox.ShortcutsEnabled = false;
-            this.PasswordTextBox.Size = new System.Drawing.Size(290, 36);
-            this.PasswordTextBox.TabIndex = 18;
+            this.PasswordTextBox.Size = new System.Drawing.Size(222, 27);
+            this.PasswordTextBox.TabIndex = 0;
             this.PasswordTextBox.Click += new System.EventHandler(this.PasswordTextBox_Click);
             this.PasswordTextBox.TextChanged += new System.EventHandler(this.PasswordTextBox_TextChanged);
             this.PasswordTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.PasswordTextBox_KeyDown);
@@ -194,6 +249,8 @@
             this.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.LanguageButton);
+            this.Controls.Add(this.WrongPasswordButton);
             this.Controls.Add(this.PasswordTextBox);
             this.Controls.Add(this.ShowPasswordButton);
             this.Controls.Add(this.ConnectionButton);
@@ -203,6 +260,7 @@
             this.Controls.Add(this.LoginButton);
             this.Controls.Add(this.CapsLockLabel);
             this.Controls.Add(this.UserNameLabel);
+            this.Controls.Add(this.WrongPasswordLabel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "WindowsLogin";
@@ -226,12 +284,15 @@
         private System.Windows.Forms.Label UserNameLabel;
         private System.Windows.Forms.Label CapsLockLabel;
         private System.Windows.Forms.Button LoginButton;
-        private Classes.RoundPictureBox UserIconPictureBox;
+        private Controls.RoundPictureBox UserIconPictureBox;
         private System.Windows.Forms.Button ConnectionButton;
         private System.Windows.Forms.Button EaseOfAccessButton;
         private System.Windows.Forms.Button PowerButton;
         private System.Windows.Forms.Button ShowPasswordButton;
-        private Classes.NoBaloonTipTextbox PasswordTextBox;
+        private Controls.NoBaloonTipTextbox PasswordTextBox;
+        private System.Windows.Forms.Label WrongPasswordLabel;
+        private System.Windows.Forms.Button WrongPasswordButton;
+        private Controls.PaddinglessButton LanguageButton;
     }
 }
 

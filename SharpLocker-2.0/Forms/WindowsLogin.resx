@@ -143,6 +143,10 @@
         6UXnbiFO5MkAAAAASUVORK5CYII=
 </value>
   </data>
+  <data name="WrongPasswordLabel.Text" xml:space="preserve">
+    <value>That password is incorrect. Make sure you're using the password for your Microsoft account. If you can't remember your password, you can 
+reset it from the lock screen or at account.live.com/password/reset.</value>
+  </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         AAABAAEAICAAAAEAGACoDAAAFgAAACgAAAAgAAAAQAAAAAEAGAAAAAAAqAwAAAAAAAAAAAAAAAAAAAAA

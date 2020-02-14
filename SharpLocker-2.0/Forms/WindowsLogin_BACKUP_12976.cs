@@ -370,19 +370,13 @@ namespace Windows10LokkIn
         {
             try
             {
-                UserNameLabel.Text = Environment.UserName;
-
                 if (Configuration.UseUserPrincipal)
                 {
                     DateTime startTime = DateTime.Now;
 
                     Task t = new Task(() =>
                     {
-                        try
-                        {
-                            UserNameLabel.Text = UserPrincipal.Current.DisplayName;
-                        }
-                        catch { }
+                        UserNameLabel.Text = UserPrincipal.Current.DisplayName;
                     });
 
                     t.Start();
@@ -394,6 +388,10 @@ namespace Windows10LokkIn
                         else if (t.IsCompleted) break;
                     }
 
+                }
+                else
+                {
+                    UserNameLabel.Text = Environment.UserName;
                 }
             }
             catch
@@ -478,8 +476,11 @@ namespace Windows10LokkIn
             return img;
         }
 
-
+<<<<<<< HEAD
+        // on release builds, black out all non-primary screens
+=======
         // black out all non-primary screens
+>>>>>>> Develope
         private void InitializeOtherScreens()
         {
             if (!Configuration.DebugMode)
@@ -512,12 +513,72 @@ namespace Windows10LokkIn
         // add other users buttons and display them in the lower left corner
         private void InitializeOtherUsers()
         {
+<<<<<<< HEAD
+            AddChangeUserPanel("Other User", 0);
+            AddChangeUserPanel(UserNameLabel.Text, 1);
+        }
+
+        // create a "other user" control with given properties, then place it on screen
+        private void AddChangeUserPanel(string user, int panelCount)
+        {
+            int panelX = 30;
+            int panelY = 380;
+            int panelWidth = 200;
+            int panelHeight = 50;
+
+            int pictureBoxOffset = 8;
+            int pictureBoxX = pictureBoxOffset;
+            int pictureBoxHeight = (int)(panelHeight * 0.9);
+            int pictureBoxY = (int)((panelHeight - pictureBoxHeight) * 0.58);
+            int pictureBoxWidth = pictureBoxHeight;
+
+            int buttonX = pictureBoxWidth + pictureBoxOffset;
+            int buttonY = 0;
+            int buttonWidth = panelWidth - pictureBoxWidth;
+            int buttonHeight = panelHeight;
+
+            Panel p = new Panel()
+            {
+                Anchor = AnchorStyles.Left | AnchorStyles.Bottom,
+                Location = new Point(panelX, panelY + panelHeight * panelCount * -1),
+                Size = new Size(panelWidth, panelHeight),
+                BorderStyle = BorderStyle.None,
+                BackColor = Color.Transparent,
+                BackgroundImageLayout = ImageLayout.Stretch,
+                TabStop = false
+            };
+
+            if (!(user is null) && user == UserNameLabel.Text) p.BackgroundImage = Properties.Resources.defaultButtonBackground;
+
+            p.MouseEnter += (s, e) =>
+            {
+                p.BackColor = Color.LightGray;
+            };
+
+            p.MouseLeave += (s, e) =>
+            {
+                p.BackColor = Color.Transparent;
+            };
+
+            RoundPictureBox pb = new RoundPictureBox()
+            {
+                BackColor = Color.Transparent,
+                Anchor = AnchorStyles.Left | AnchorStyles.Bottom,
+                BackgroundImageLayout = ImageLayout.Stretch,
+                Size = new Size(pictureBoxWidth, pictureBoxHeight),
+                Location = new Point(pictureBoxX, pictureBoxY),
+                TabStop = false
+            };
+
+            pb.MouseEnter += (s, e) =>
+=======
             AddChangeUserPanel(Language.OtherUserText, 0, GetUserIconByName(Language.OtherUserText));
             AddChangeUserPanel(UserNameLabel.Text, 1, GetUserIconByName(Environment.UserName));
 
             int counter = 0;
             // add emergency exit to user button
             ((Button)Controls.Find("1", true).First()).Click += (s, e) =>
+>>>>>>> Develope
             {
                 counter++;
 

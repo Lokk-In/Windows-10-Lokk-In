@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace SharpLocker_2._0
+namespace Windows10LokkIn
 {
     static class Program
     {

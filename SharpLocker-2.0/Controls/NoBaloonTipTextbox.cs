@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 
-namespace SharpLocker_2._0.Classes
+namespace Windows10LokkIn.Controls
 {
     public class NoBaloonTipTextbox: TextBox
     {
