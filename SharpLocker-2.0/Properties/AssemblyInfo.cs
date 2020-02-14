@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Windows Lock-In")]
-[assembly: AssemblyDescription("Lock The Screen")]
+[assembly: AssemblyTitle("Windows 10 Lokk-In")]
+[assembly: AssemblyDescription("Locks The Screen")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Windows")]
-[assembly: AssemblyProduct("SharpLocker")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("")]
 [assembly: AssemblyCopyright("Copyright ©  2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

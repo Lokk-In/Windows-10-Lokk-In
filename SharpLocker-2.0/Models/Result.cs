@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SharpLocker_2._0.Models
+namespace Windows10LokkIn.Models
 {
     public class Result
     {

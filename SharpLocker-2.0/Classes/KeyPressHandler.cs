@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace SharpLocker_2._0.Classes
+namespace Windows10LokkIn.Classes
 {
     /// <summary>
     /// This class is responsible for intercepting certain key combinations

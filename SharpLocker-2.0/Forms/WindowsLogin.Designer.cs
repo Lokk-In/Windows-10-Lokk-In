@@ -1,4 +1,4 @@
-﻿namespace SharpLocker_2._0
+﻿namespace Windows10LokkIn
 {
     partial class WindowsLogin
     {
@@ -38,9 +38,9 @@
             this.ShowPasswordButton = new System.Windows.Forms.Button();
             this.WrongPasswordLabel = new System.Windows.Forms.Label();
             this.WrongPasswordButton = new System.Windows.Forms.Button();
-            this.LanguageButton = new SharpLocker_2._0.Controls.PaddinglessButton();
-            this.PasswordTextBox = new SharpLocker_2._0.Controls.NoBaloonTipTextbox();
-            this.UserIconPictureBox = new SharpLocker_2._0.Controls.RoundPictureBox();
+            this.LanguageButton = new Windows10LokkIn.Controls.PaddinglessButton();
+            this.PasswordTextBox = new Windows10LokkIn.Controls.NoBaloonTipTextbox();
+            this.UserIconPictureBox = new Windows10LokkIn.Controls.RoundPictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.UserIconPictureBox)).BeginInit();
             this.SuspendLayout();
             // 
@@ -79,7 +79,7 @@
             this.ConnectionButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.ConnectionButton.AutoSize = true;
             this.ConnectionButton.BackColor = System.Drawing.Color.Transparent;
-            this.ConnectionButton.BackgroundImage = global::SharpLocker_2._0.Properties.Resources.ethernet;
+            this.ConnectionButton.BackgroundImage = global::Windows10LokkIn.Properties.Resources.ethernet;
             this.ConnectionButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ConnectionButton.FlatAppearance.BorderColor = System.Drawing.Color.SkyBlue;
             this.ConnectionButton.FlatAppearance.BorderSize = 0;
@@ -97,7 +97,7 @@
             this.EaseOfAccessButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.EaseOfAccessButton.AutoSize = true;
             this.EaseOfAccessButton.BackColor = System.Drawing.Color.Transparent;
-            this.EaseOfAccessButton.BackgroundImage = global::SharpLocker_2._0.Properties.Resources.easeOfAccess;
+            this.EaseOfAccessButton.BackgroundImage = global::Windows10LokkIn.Properties.Resources.easeOfAccess;
             this.EaseOfAccessButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.EaseOfAccessButton.FlatAppearance.BorderColor = System.Drawing.Color.SkyBlue;
             this.EaseOfAccessButton.FlatAppearance.BorderSize = 0;
@@ -115,7 +115,7 @@
             this.PowerButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.PowerButton.AutoSize = true;
             this.PowerButton.BackColor = System.Drawing.Color.Transparent;
-            this.PowerButton.BackgroundImage = global::SharpLocker_2._0.Properties.Resources.power;
+            this.PowerButton.BackgroundImage = global::Windows10LokkIn.Properties.Resources.power;
             this.PowerButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.PowerButton.FlatAppearance.BorderColor = System.Drawing.Color.SkyBlue;
             this.PowerButton.FlatAppearance.BorderSize = 0;
@@ -133,7 +133,7 @@
             this.LoginButton.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.LoginButton.AutoSize = true;
             this.LoginButton.BackColor = System.Drawing.Color.Transparent;
-            this.LoginButton.BackgroundImage = global::SharpLocker_2._0.Properties.Resources.login;
+            this.LoginButton.BackgroundImage = global::Windows10LokkIn.Properties.Resources.login;
             this.LoginButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.LoginButton.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.LoginButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -184,7 +184,7 @@
             this.WrongPasswordButton.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.WrongPasswordButton.AutoSize = true;
             this.WrongPasswordButton.BackColor = System.Drawing.Color.Transparent;
-            this.WrongPasswordButton.BackgroundImage = global::SharpLocker_2._0.Properties.Resources.defaultButtonBackground;
+            this.WrongPasswordButton.BackgroundImage = global::Windows10LokkIn.Properties.Resources.defaultButtonBackground;
             this.WrongPasswordButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.WrongPasswordButton.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.WrongPasswordButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;

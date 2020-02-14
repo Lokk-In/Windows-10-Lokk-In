@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 /// <summary>
 /// Taken from https://github.com/mdymel/superfastblur
 /// </summary>
-namespace SharpLocker_2._0.Classes
+namespace Windows10LokkIn.Classes
 {
     internal class GaussianBlur
     {

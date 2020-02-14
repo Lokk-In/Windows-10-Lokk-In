@@ -1,6 +1,6 @@
-﻿using SharpLocker_2._0.Interfaces;
+﻿using Windows10LokkIn.Interfaces;
 
-namespace SharpLocker_2._0.Models
+namespace Windows10LokkIn.Models
 {
     public class EnglishLanguage : ILanguage
     {
@@ -15,5 +15,6 @@ namespace SharpLocker_2._0.Models
 reset it from the lock screen or at account.live.com/password/reset.";
             language.Keyboard = "Keyboard";
         }
+
     }
 }

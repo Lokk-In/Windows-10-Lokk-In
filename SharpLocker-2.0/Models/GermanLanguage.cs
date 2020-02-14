@@ -1,7 +1,7 @@
-﻿using SharpLocker_2._0.Interfaces;
+﻿using Windows10LokkIn.Interfaces;
 using System;
 
-namespace SharpLocker_2._0.Models
+namespace Windows10LokkIn.Models
 {
     public class GermanLanguage : ILanguage
     {

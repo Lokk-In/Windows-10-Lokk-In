@@ -1,6 +1,6 @@
-﻿using SharpLocker_2._0.Controls;
-using SharpLocker_2._0.Interfaces;
-using SharpLocker_2._0.Models;
+﻿using Windows10LokkIn.Controls;
+using Windows10LokkIn.Interfaces;
+using Windows10LokkIn.Models;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -8,7 +8,7 @@ using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace SharpLocker_2._0.Classes
+namespace Windows10LokkIn.Classes
 {
     internal static class ControlFactory
     {
@@ -182,13 +182,13 @@ namespace SharpLocker_2._0.Classes
 
             if (c is null) c = CultureInfo.CurrentCulture;
 
-            p.Controls.Add(GetSingleLanguageLabel(p, (int)(width * 0.2), height, 0, 0, c.ThreeLetterWindowsLanguageName, true));
-            p.Controls.Add(GetSingleLanguageLabel(p, (int)(width * 0.8), height, (int)(width * 0.2), 0, $"{c.NativeName}{Environment.NewLine}{InputLanguage.CurrentInputLanguage.LayoutName}-{currentLanguage.Keyboard}", false));
+            p.Controls.Add(GetSingleLanguageLabel(p, (int)(width * 0.2), height, 0, 0, c.ThreeLetterWindowsLanguageName, true, language.Identifier + "1"));
+            p.Controls.Add(GetSingleLanguageLabel(p, (int)(width * 0.8), height, (int)(width * 0.2), 0, $"{c.NativeName}{Environment.NewLine}{InputLanguage.CurrentInputLanguage.LayoutName}-{currentLanguage.Keyboard}", false, language.Identifier + "2"));
 
             return p;
         }
 
-        private static Label GetSingleLanguageLabel(Panel parent, int width, int height, int x, int y, string text, bool bold)
+        private static Label GetSingleLanguageLabel(Panel parent, int width, int height, int x, int y, string text, bool bold, string name)
         {
 
             Label l = new Label()
@@ -202,7 +202,8 @@ namespace SharpLocker_2._0.Classes
                 TabStop = false,
                 Font = new Font("Segoe UI", 11.25f),
                 ForeColor = Color.White,
-                Text = text
+                Text = text,
+                Name = name
             };
 
             l.MouseEnter += (s, e) =>

@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace SharpLocker_2._0.Controls
+namespace Windows10LokkIn.Controls
 {
     //https://stackoverflow.com/questions/6107108/reduce-padding-around-text-in-winforms-button
     internal class PaddinglessButton: Button

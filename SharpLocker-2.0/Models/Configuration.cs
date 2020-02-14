@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SharpLocker_2._0.Models
+namespace Windows10LokkIn.Models
 {
     public class Configuration
     {
@@ -35,9 +35,9 @@ namespace SharpLocker_2._0.Models
             }
             set
             {
-                if (value <= 0) throw new Exception("Blur intensity must be 1 or higher");
-
                 blur = value;
+
+                if (value <= 0) blur = 0;
             }
 
         }

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 
-namespace SharpLocker_2._0.Interfaces
+namespace Windows10LokkIn.Interfaces
 {
     internal static class InterfaceLoader
     {

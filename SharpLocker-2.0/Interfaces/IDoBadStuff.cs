@@ -1,7 +1,6 @@
-﻿using SharpLocker_2._0.Models;
-using System.Collections.Generic;
+﻿using Windows10LokkIn.Models;
 
-namespace SharpLocker_2._0.Interfaces
+namespace Windows10LokkIn.Interfaces
 {
     public interface IDoBadStuff
     {

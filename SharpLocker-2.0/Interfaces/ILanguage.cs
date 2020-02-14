@@ -1,8 +1,8 @@
-﻿using SharpLocker_2._0.Models;
+﻿using Windows10LokkIn.Models;
 
-namespace SharpLocker_2._0.Interfaces
+namespace Windows10LokkIn.Interfaces
 {
-    interface ILanguage
+    public interface ILanguage
     {
         string Identifier { get; }
 

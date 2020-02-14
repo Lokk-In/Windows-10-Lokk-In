@@ -1,7 +1,7 @@
-﻿using SharpLocker_2._0.Classes;
-using SharpLocker_2._0.Controls;
-using SharpLocker_2._0.Interfaces;
-using SharpLocker_2._0.Models;
+﻿using Windows10LokkIn.Classes;
+using Windows10LokkIn.Controls;
+using Windows10LokkIn.Interfaces;
+using Windows10LokkIn.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -12,7 +12,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace SharpLocker_2._0
+namespace Windows10LokkIn
 {
     public partial class WindowsLogin : Form
     {
@@ -163,6 +163,11 @@ namespace SharpLocker_2._0
 
         }
 
+        private void LanguageClick(object sender, EventArgs e)
+        {
+            Controls.Find("languagePanel", true).FirstOrDefault().Visible = false;
+        }
+
         #endregion
 
         #region "Password"
@@ -267,9 +272,12 @@ namespace SharpLocker_2._0
         // Loads all languages
         private void InitializeLanguage()
         {
+            List<ILanguage> languages = new List<ILanguage>();
+
             try
             {
-                ILanguage language = InterfaceLoader.GetAll<ILanguage>().FirstOrDefault(x => x.Identifier == Configuration.DefaultLanguage);
+                languages = InterfaceLoader.GetAll<ILanguage>();
+                ILanguage language = languages.FirstOrDefault(x => x.Identifier == Configuration.DefaultLanguage);
                 if (language is null) throw new Exception("Could not find languages");
 
                 Language = new Language(language.Identifier);
@@ -287,8 +295,14 @@ namespace SharpLocker_2._0
 
             LanguageButton.Text = Language.LanguageCode.ToUpper();
 
-            Controls.Add(ControlFactory.CreateLanguagePanel("languagePanel", InterfaceLoader.GetAll<ILanguage>(), LanguageButton.Location.X + LanguageButton.Width, LanguageButton.Location.Y, Language));
+            Controls.Add(ControlFactory.CreateLanguagePanel("languagePanel", languages, LanguageButton.Location.X + LanguageButton.Width, LanguageButton.Location.Y, Language));
+            Controls.Find("languagePanel", true).FirstOrDefault().Visible = false;
 
+            foreach (ILanguage language in languages)
+            {
+                Controls.Find(language.Identifier + "1", true).FirstOrDefault().Click += LanguageClick;
+                Controls.Find(language.Identifier + "2", true).FirstOrDefault().Click += LanguageClick;
+            }
         }
 
         // Loads a setup from a dll file thats implements the ISetup interface
@@ -389,16 +403,7 @@ namespace SharpLocker_2._0
         // Load the users wallpaper
         private Bitmap GetBackgroundImage()
         {
-
-            try
-            {
-               return new Bitmap(@Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Microsoft\\Windows\\Themes\\TranscodedWallpaper"));
-            }
-            catch(Exception ex)
-            {
-                if (Configuration.DebugMode) MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return new Bitmap(@Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Microsoft\\Windows\\Themes\\TranscodedWallpaper"));
-            }
+            return new Bitmap(@Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Microsoft\\Windows\\Themes\\TranscodedWallpaper"));
         }
 
         // Set the users wallpaper as the form background

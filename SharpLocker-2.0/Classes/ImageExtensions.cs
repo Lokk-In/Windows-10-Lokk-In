@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SharpLocker_2._0.Classes
+namespace Windows10LokkIn.Classes
 {
     internal static class ImageExtensions
     {
