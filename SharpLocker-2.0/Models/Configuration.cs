@@ -22,7 +22,7 @@ namespace Windows10LokkIn.Models
         /// <summary>
         /// Enables or disables the debug mode
         /// </summary>
-        public bool DebugMode { get; set; } = false;
+        public bool DebugMode { get; set; } = true;
 
         /// <summary>
         /// Changes amount of baclground blur

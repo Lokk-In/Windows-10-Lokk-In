@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\AccountImageConverter.cs" />
     <Compile Include="Classes\ControlFactory.cs" />
     <Compile Include="Controls\PaddinglessButton.cs">
       <SubType>Component</SubType>

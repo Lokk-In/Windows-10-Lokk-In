@@ -434,14 +434,31 @@ namespace Windows10LokkIn
         {
             try
             {
+                DateTime highestCreation = DateTime.MinValue;
+                string accountPicture = "";
+
                 foreach (string f in Directory.GetFiles(path))
                 {
-                    if (!f.EndsWith($".{fileEnding}")) continue;
-                    if (!Path.GetFileName(f).Contains(Environment.UserName)) continue;
-                    return Image.FromFile(f);
+                    if (fileEnding == "accountpicture-ms")
+                    {
+                        DateTime creationTime = File.GetCreationTime(f);
+                        if (highestCreation < creationTime)
+                        {
+                            highestCreation = creationTime;
+                            accountPicture = f;
+                        }
+                    }
+                    else
+                    {
+                        if (!f.EndsWith($".{fileEnding}")) continue;
+                        if (!Path.GetFileName(f).Contains(Environment.UserName)) continue;
+                        return Image.FromFile(f);
+                    }
                 }
 
-                return null;
+                if (string.IsNullOrEmpty(accountPicture)) return null;
+
+                return AccountImageConverter.Convert(accountPicture);
             }
             catch
             {
@@ -469,6 +486,9 @@ namespace Windows10LokkIn
 
             if (img is null)
                 img = GetUserIconFromPath("jpg", path);
+
+            if (img is null)
+                img = GetUserIconFromPath("accountpicture-ms",Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"Microsoft\Windows\AccountPictures"));
 
             if (img is null)
                 img = Properties.Resources.defaultAvatar;
