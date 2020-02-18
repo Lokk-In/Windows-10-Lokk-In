@@ -31,6 +31,11 @@ namespace Windows10LokkIn.Classes
     /// </summary>
     internal static class AccountImageConverter
     {
+        /// <summary>
+        ///  converts an accountpicture-ms file to a bitmap
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
         public static Bitmap Convert(string path)
         {
             return GetImage(path);

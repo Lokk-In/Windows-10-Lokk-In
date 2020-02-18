@@ -22,11 +22,21 @@ namespace Windows10LokkIn
             Application.Run(new WindowsLogin());
         }
 
+        /// <summary>
+        /// Handles occuring exceptions in different threads then the main thread
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private static void CurrentDomainOnUnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
             MessageBox.Show(((Exception)e.ExceptionObject).ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
+        /// <summary>
+        /// Handles occuring exceptions in the main thread
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private static void ApplicationThreadException(object sender, ThreadExceptionEventArgs e)
         {
             MessageBox.Show(e.Exception.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);

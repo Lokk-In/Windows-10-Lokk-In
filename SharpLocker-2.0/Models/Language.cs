@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Windows10LokkIn.Models
+﻿namespace Windows10LokkIn.Models
 {
+    /// <summary>
+    /// Contains the translation of a language
+    /// </summary>
     public class Language
     {
         private string placeholderText = "Password";
-        private string code;
+        private readonly string code;
 
         public Language(string code)
         {

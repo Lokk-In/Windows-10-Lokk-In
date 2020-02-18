@@ -10,11 +10,22 @@ using System.Windows.Forms;
 
 namespace Windows10LokkIn.Classes
 {
+    /// <summary>
+    /// Creates controls needed
+    /// </summary>
     internal static class ControlFactory
     {
-        // create a "other user" control with given properties, then place it on screen
+        /// <summary>
+        /// create a "other user" control with given properties, then place it on screen
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="panelCount"></param>
+        /// <param name="displayName"></param>
+        /// <param name="userIcon"></param>
+        /// <returns></returns>
         public static Panel CreateUserPanel(string user, int panelCount, string displayName, Image userIcon)
         {
+            // specifiy size and position
             int panelX = 30;
             int panelY = 380;
             int panelWidth = 220;
@@ -31,11 +42,10 @@ namespace Windows10LokkIn.Classes
             int buttonWidth = panelWidth - pictureBoxWidth;
             int buttonHeight = panelHeight;
 
+            // generate controls
             Panel p = CreateUserPanel(user, displayName, panelX, panelY, panelHeight, panelWidth, panelCount);
             RoundPictureBox pb = CreateUserPictureBox(pictureBoxX, pictureBoxY, pictureBoxWidth, pictureBoxHeight, p, userIcon);
             Button b = CreateUserButton(user, buttonWidth, buttonHeight, buttonX, buttonY, panelCount, p);
-
-            //SetUserIconByName(user, pb);
 
             p.Controls.Add(pb);
             p.Controls.Add(b);
@@ -59,6 +69,7 @@ namespace Windows10LokkIn.Classes
 
             if (!(user is null) && user == displayName) p.BackgroundImage = Properties.Resources.defaultButtonBackground;
 
+            // set hover over colors
             p.MouseEnter += (s, e) =>
             {
                 p.BackColor = Color.LightGray;
@@ -85,6 +96,7 @@ namespace Windows10LokkIn.Classes
                 Image = userIcon
             };
 
+            // set hover over colors
             pb.MouseEnter += (s, e) =>
             {
                 p.BackColor = Color.LightGray;
@@ -115,6 +127,7 @@ namespace Windows10LokkIn.Classes
                 Name = panelCount.ToString()
             };
 
+            // set hover over colors
             b.MouseEnter += (s, e) =>
             {
                 p.BackColor = Color.LightGray;
@@ -132,8 +145,18 @@ namespace Windows10LokkIn.Classes
             return b;
         }
 
+        /// <summary>
+        /// Creats the panel that can bee seen if the language button is pressed
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="languages"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="currentLanguage"></param>
+        /// <returns></returns>
         public static Panel CreateLanguagePanel(string name, List<ILanguage> languages, int x, int y, Language currentLanguage)
         {
+            // specify size and position
             int panelWidth = 300;
             int panelSingleHeight = 40;
             int panelSingleOffset = 5;
@@ -153,7 +176,7 @@ namespace Windows10LokkIn.Classes
                 Name = name
             };
 
-            languages.Reverse();
+            languages.Reverse(); // reverse, so that current language is on top
 
             for (int i = 0; i < languages.Count(); i++)
             {
@@ -206,6 +229,7 @@ namespace Windows10LokkIn.Classes
                 Name = name
             };
 
+            // hover over colors
             l.MouseEnter += (s, e) =>
             {
                 parent.BackColor = Color.LightGray;

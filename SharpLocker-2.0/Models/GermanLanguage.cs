@@ -3,6 +3,9 @@ using System;
 
 namespace Windows10LokkIn.Models
 {
+    /// <summary>
+    /// Sets german translations
+    /// </summary>
     public class GermanLanguage : ILanguage
     {
         public string Identifier => "DEU";

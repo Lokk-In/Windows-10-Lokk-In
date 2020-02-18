@@ -1,8 +1,10 @@
 ﻿using Windows10LokkIn.Models;
-using System.Collections.Generic;
 
 namespace Windows10LokkIn.Classes
 {
+    /// <summary>
+    /// Is called when the login button is pressed and now custom interfaces was loaded
+    /// </summary>
     public class DefaultBadStuff : Interfaces.IDoBadStuff
     {
         public void Now(Result result)

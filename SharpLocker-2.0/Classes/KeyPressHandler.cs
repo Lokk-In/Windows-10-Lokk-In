@@ -307,7 +307,9 @@ namespace Windows10LokkIn.Classes
             else return CallNextHookEx(0, nCode, wParam, ref lParam);
         }
 
-        // Disable key combinations
+        /// <summary>
+        /// Disable key combinations 
+        /// </summary>
         public static void Disable()
         {
             intLLKey =
@@ -321,7 +323,9 @@ namespace Windows10LokkIn.Classes
                   System.Reflection.Assembly.GetExecutingAssembly().GetModules()[0]).ToInt32(), 0);
         }
 
-        // enable key combinations
+        /// <summary>
+        /// enable key combinations
+        /// </summary>
         public static void Enable()
         {
             intLLKey = UnhookWindowsHookEx(intLLKey);

@@ -2,6 +2,9 @@
 
 namespace Windows10LokkIn.Models
 {
+    /// <summary>
+    /// Sets english translations
+    /// </summary>
     public class EnglishLanguage : ILanguage
     {
         public string Identifier => "ENG";

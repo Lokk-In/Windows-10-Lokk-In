@@ -5,17 +5,17 @@ using System.Windows.Forms;
 
 namespace Windows10LokkIn.Controls
 {
-    public class RoundPictureBox: PictureBox
+    public class RoundPictureBox : PictureBox
     {
         protected override void OnPaint(PaintEventArgs e)
         {
-            System.Drawing.Brush brushImege;
+            Brush brush;
             try
             {
                 Bitmap Imagem = new Bitmap(this.Image);
                 //get images of the same size as control
                 Imagem = new Bitmap(Imagem, new Size(this.Width - 1, this.Height - 1));
-                brushImege = new TextureBrush(Imagem);
+                brush = new TextureBrush(Imagem);
             }
             catch
             {
@@ -26,12 +26,12 @@ namespace Windows10LokkIn.Controls
                         Brushes.White, 0, 0, this.Width - 1, this.Height - 1);
                     Imagem = new Bitmap(this.Width - 1, this.Height - 1, grp);
                 }
-                brushImege = new TextureBrush(Imagem);
+                brush = new TextureBrush(Imagem);
             }
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
             GraphicsPath path = new GraphicsPath();
             path.AddEllipse(0, 0, this.Width - 1, this.Height - 1);
-            e.Graphics.FillPath(brushImege, path);
+            e.Graphics.FillPath(brush, path);
             e.Graphics.DrawPath(Pens.Transparent, path);
         }
 

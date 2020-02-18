@@ -2,6 +2,9 @@
 
 namespace Windows10LokkIn.Models
 {
+    /// <summary>
+    /// Contains properties that will influence the programs behaviour
+    /// </summary>
     public class Configuration
     {
         private int minPasswordErrors = 1;
@@ -22,7 +25,7 @@ namespace Windows10LokkIn.Models
         /// <summary>
         /// Enables or disables the debug mode
         /// </summary>
-        public bool DebugMode { get; set; } = true;
+        public bool DebugMode { get; set; } = false;
 
         /// <summary>
         /// Changes amount of baclground blur
@@ -87,6 +90,11 @@ namespace Windows10LokkIn.Models
             }
         }
 
+        /// <summary>
+        /// The language that is selected at program start
+        /// If no language is specified the current pc language is used.
+        /// If the language specified can not be found english will be set as language.
+        /// </summary>
         public string DefaultLanguage
         {
             get
